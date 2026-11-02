@@ -626,9 +626,12 @@
   /* un geste sur le vrai panier EasyOrders : ouvrir son tiroir (invisible), toucher le bouton de la ligne, attendre, refermer */
   function themeCart(slug, act) {
     queue = queue.then(function () {
+      function line() { return $$('[data-cart="item"]').filter(function (li) { var a = li.querySelector('a[href]'); return a && a.getAttribute('href') === '/products/' + slug; })[0]; }
       return app().then(function () {
-        if (!themeCartOpen()) { var b = $('#__next .cart-btn'); if (b) b.click(); }
-        return waitFor(function () { return $$('[data-cart="item"]').filter(function (li) { var a = li.querySelector('a[href]'); return a && a.getAttribute('href') === '/products/' + slug; })[0]; }, 5000);
+        /* le tiroir reste dans la page apres sa premiere ouverture : on l'ouvre seulement si ses lignes n'existent pas encore */
+        if (line()) return line();
+        var b = $('#__next .cart-btn'); if (b) b.click();
+        return waitFor(line, 5000);
       }).then(function (li) {
         if (!li) return;
         var q = $('[data-cart="item-quantity"]', li), before = q ? q.textContent : '';
@@ -674,11 +677,15 @@
     f.animate([{ transform: 'translate(0,0) scale(1)', opacity: 1 }, { transform: 'translate(' + dx * 0.55 + 'px,' + (dy * 0.35 - 60) + 'px) scale(.55)', opacity: 0.95, offset: 0.55 }, { transform: 'translate(' + dx + 'px,' + dy + 'px) scale(.12)', opacity: 0.2 }],
       { duration: 820, easing: 'cubic-bezier(.5,0,.3,1)' }).onfinish = function () { f.remove(); };
   }
-  function themeCartOpen() { var r = $('[data-cart="root"]'); return r && /open/.test(r.getAttribute('data-headlessui-state') || 'open') ? r : null; }
+  /* le tiroir du theme reste dans la page une fois ferme (pousse hors de l'ecran, attribut « open » perime) : ouvert = panneau a l'ecran */
+  function themeCartOpen() {
+    var r = $('[data-cart="root"]'), p = r && $('[data-cart="panel"]', r); if (!p) return null;
+    var b = p.getBoundingClientRect(); return b.width && b.right > 1 && b.left < innerWidth - 1 ? r : null;
+  }
   /* le theme ouvre son tiroir apres un ajout (une fois sa requete faite) : il est invisible, on le referme (dans la file) */
   function closeThemeCart() {
     queue = queue.then(function () {
-      return waitFor(themeCartOpen, 4000).then(function (r) { var c = r && $('[data-cart="close-button"]', r); if (c) c.click(); return new Promise(function (ok) { setTimeout(ok, 250); }); });
+      return waitFor(themeCartOpen, 2500).then(function (r) { var c = r && $('[data-cart="close-button"]', r); if (c) c.click(); return new Promise(function (ok) { setTimeout(ok, 250); }); });
     }).catch(function () {});
     return queue;
   }

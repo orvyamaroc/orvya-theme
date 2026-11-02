@@ -78,6 +78,14 @@ html.ov-v-product #ab-reviews .ab-reviews-write-btn:active{transform:scale(.975)
 html.ov-v-product #ab-reviews .ab-reviews-write-btn > span{display:none!important}
 html.ov-v-product #ab-reviews .ab-reviews-write-btn::before{content:"Écrire un avis"}
 html.ov-v-product #ab-reviews .ab-reviews-list{min-width:0}
+html.ov-v-product #ab-reviews .ab-reviews-col-rating{order:1}
+html.ov-v-product #ab-reviews .ab-reviews-col-bars{order:2}
+html.ov-v-product #ab-reviews .ab-reviews-col-cta{order:3}
+html.ov-v-product #ab-reviews .ab-reviews-list{order:4}
+html.ov-v-product #ab-reviews .ab-reviews-empty{order:5}
+/* alignement a gauche (le theme centre ses colonnes) */
+html.ov-v-product #ab-reviews .ab-reviews-col,html.ov-v-product #ab-reviews .ab-reviews-hero-title{display:flex!important;flex-direction:column!important;align-items:flex-start!important;justify-content:flex-start!important;text-align:left!important}
+html.ov-v-product #ab-reviews .ab-reviews-col-bars{align-items:stretch!important}
 /* sans avis : etoiles, texte et bouton de la maquette (« Aucun avis pour le moment… ») */
 html.ov-rev-empty #ab-reviews .ab-reviews-score-out,html.ov-rev-empty #ab-reviews .ab-reviews-based-line,html.ov-rev-empty #ab-reviews .ab-reviews-col-bars,html.ov-rev-empty #ab-reviews .ab-reviews-list{display:none!important}
 html.ov-rev-empty #ab-reviews .ab-reviews-empty{display:block!important;margin:0!important;padding:0!important;font-size:0!important;text-align:left!important}
@@ -86,11 +94,6 @@ html.ov-rev-empty #ab-reviews .ab-reviews-empty::after{content:"Vous l’avez re
 html.ov-rev-empty #ab-reviews .ab-reviews-col-rating{order:1}
 html.ov-rev-empty #ab-reviews .ab-reviews-empty{order:2}
 html.ov-rev-empty #ab-reviews .ab-reviews-col-cta{order:3;margin-top:8px!important}
-html.ov-v-product #ab-reviews .ab-reviews-col-rating{order:1}
-html.ov-v-product #ab-reviews .ab-reviews-col-bars{order:2}
-html.ov-v-product #ab-reviews .ab-reviews-col-cta{order:3}
-html.ov-v-product #ab-reviews .ab-reviews-list{order:4}
-html.ov-v-product #ab-reviews .ab-reviews-empty{order:5}
 @media (min-width:900px){
   /* titre a gauche, le reste a droite (grille 1fr / 1.4fr de la maquette) */
   html.ov-v-product #ab-reviews{grid-template-columns:1fr 1.4fr;align-items:center;row-gap:12px}
