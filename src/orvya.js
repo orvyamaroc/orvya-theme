@@ -38,7 +38,7 @@
     ['Puis-je ouvrir le colis avant de payer ?', 'Bien sûr. Ouvrez votre colis et découvrez votre bijou avant de régler.'],
     ['Comment entretenir mes bijoux ?', 'Rangez-les à l’abri de l’humidité et évitez le contact direct avec le parfum et les crèmes pour préserver leur éclat. Une question ? Écrivez-nous sur WhatsApp.'],
     ['Puis-je échanger ou retourner un bijou ?', 'Oui, sous 7 jours après réception, si le bijou est non porté, non endommagé et dans son emballage d’origine. Pour des raisons d’hygiène, les boucles d’oreilles ne sont ni reprises ni échangées, sauf défaut de fabrication.'],
-    ['Mes bijoux sont-ils garantis ?', 'Oui, 6 mois. Si la finition dorée se dégrade dans des conditions d’utilisation normales, nous échangeons votre bijou gratuitement.']
+    ['Mes bijoux sont-ils garantis ?', 'Oui, 2 ans. Si la finition dorée se dégrade dans des conditions d’utilisation normales, nous échangeons votre bijou gratuitement.']
   ];
   var I = {
     arrow: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M5 12h14M13 6l6 6-6 6"/></svg>',
@@ -157,7 +157,7 @@
       '<div><p class="eyebrow" data-rv>Pourquoi ORVYA</p><h2 class="h2 split" data-rv>' + split('L’élégance [[au quotidien]]') + '</h2><span class="filet" data-rv="line"></span>' +
       '<p class="lead" style="margin-top:24px" data-rv>Des pièces raffinées, dessinées pour sublimer chaque tenue, du matin au soir.</p><ul class="engagements">' +
       '<li data-rv style="--i:0">' + I.drop + '<div><strong>Acier inoxydable 316L</strong><span>Finition dorée qui résiste à l’eau.</span></div></li>' +
-      '<li data-rv style="--i:1">' + I.shield + '<div><strong>Garantie 6 mois</strong><span>Échange gratuit si la finition se dégrade en usage normal.</span></div></li>' +
+      '<li data-rv style="--i:1">' + I.shield + '<div><strong>Garantie 2 ans</strong><span>Échange gratuit si la finition se dégrade en usage normal.</span></div></li>' +
       '<li data-rv style="--i:2">' + I.box + '<div><strong>Ouvrez avant de payer</strong><span>Découvrez votre bijou et assurez-vous qu’il vous plaît avant de régler.</span></div></li></ul>' +
       '<a class="link-arrow" style="margin-top:28px" href="' + PAGES.garantie + '" data-rv="fade">Nos engagements ' + I.arrow + '</a></div></div></section>' +
     '<section class="gift section"><span class="gift__pattern" aria-hidden="true"></span><div class="wrap gift__grid"><div>' +
