@@ -1,17 +1,21 @@
 /* ORVYA — raccords entre la maquette (reprise telle quelle par build.js) et la boutique EasyOrders.
    Seul ce fichier contient des regles propres a la boutique ; le reste du design est celui de la maquette. */
 
-/* Bloc du haut (bandeau, en-tete, accueil) : il ne cree pas de boite, pour que l'en-tete reste colle en haut
+/* Bloc du haut (bandeau, en-tete, page) : il ne cree pas de boite, pour que l'en-tete reste colle en haut
    de toute la page comme dans la maquette (position sticky par rapport a la page, pas a un conteneur). */
 .ov.ov-top{display:contents}
 /* le haut de page est ecrit dans le code du head (dans #__next) : son conteneur ne cree pas de boite non plus */
 #__next > div:has(> #ov-top){display:contents}
 .ov.ov-end{overflow:visible}
 .ov [hidden]{display:none!important}
+/* blocs poses a cote des champs EasyOrders (page de commande) : sans boite, leurs enfants prennent place dans la grille */
+.ov-dc{display:contents!important}
 html.ov-on,html.ov-on body{background:var(--ivoire)}
 html.ov-locked,html.ov-locked body{overflow:hidden}
+/* « main » de la maquette (regle non reprise par build.js) */
+.ov main.ov-page{display:block;min-height:60vh}
 
-/* Parties du theme remplacees par celles de la maquette (le theme reste charge : panier, commande, liste d'envies) */
+/* Parties du theme remplacees par celles de la maquette (le theme reste charge : panier, commande, avis) */
 html.ov-on #__next .ab-announce,
 html.ov-on #__next .ab-header-sticky-wrap,
 html.ov-on #__next header.ab-header,
@@ -20,6 +24,17 @@ html.ov-on #__next footer.ab-footer{display:none!important}
 html.ov-home #__next main.container_class,
 html.ov-home #orvya-ph{display:none!important}
 html.ov-home #__next .app_container{min-height:0!important}
+/* Pages dessinees par le design (collection, fiche, recherche, favoris, panier, aide, 404) : contenu du theme masque des le
+   premier affichage (classe posee par le code du head). Sur la fiche produit, seuls les avis EasyOrders restent. */
+html.ov-view #__next .app_container > :not(:first-child):not(#product-id){display:none!important}
+html.ov-view #__next .app_container{min-height:0!important}
+html.ov-v-product #__next #product-id{padding:0!important}
+html.ov-v-product #__next #product-id > :not(:has(#ab-reviews)){display:none!important}
+html.ov-v-product:not(.ov-page-ready) #__next #product-id{visibility:hidden}
+html.ov-co-empty #__next .app_container > :not(:first-child){display:none!important}
+/* Tiroir du panier EasyOrders : il fait les changements du panier de la maquette, sans jamais se montrer */
+html.ov-on [data-cart="root"]{opacity:0!important;pointer-events:none!important}
+html.ov-on{padding-right:0!important}
 
 /* Le theme impose sa police (Jost) a tous les liens : dans nos blocs, chaque element herite comme dans la maquette */
 .ov *{font-family:inherit}
@@ -27,3 +42,102 @@ html.ov-home #__next .app_container{min-height:0!important}
 .ov .input{border-color:var(--ligne-forte)!important}
 .ov .input:hover{border-color:var(--encre)!important}
 .ov .input:focus{border-color:var(--bordeaux)!important}
+
+/* Telephone : la photo d'un arc ou d'une carte reste decoupee pendant son animation dans un rail (sans masque, le navigateur
+   cesse de couper l'image qui s'agrandit et l'arc devient un rectangle) */
+.ov .arch,.ov .card__media{-webkit-mask-image:-webkit-radial-gradient(#fff,#000);mask-image:linear-gradient(#000,#000)}
+/* Telephone : les cartes montent de 28 px en apparaissant ; le rail (defilement horizontal) coupait ce qui depasse en bas.
+   Marge interieure et marge negative egales : rien ne bouge, mais la carte n'est plus coupee. */
+.ov .rail{padding-block:40px;margin-block:-40px}
+.ov .section-head,.ov .rail-ctrl{position:relative;z-index:2}
+
+/* ---------- Avis de la fiche produit : section EasyOrders habillee comme « .reviews » de la maquette ---------- */
+html.ov-v-product #__next #product-id > div:has(#ab-reviews){width:100%;max-width:var(--max);margin-inline:auto;padding-inline:var(--gouttiere)}
+html.ov-v-product #ab-reviews{display:grid!important;grid-template-columns:minmax(0,1fr);gap:var(--s-4) var(--s-6);padding:var(--s-7) 0!important;margin:0!important;border-top:1px solid var(--ligne);background:none!important;max-width:none!important;font-family:var(--f-texte);color:var(--encre);text-align:left}
+html.ov-v-product #ab-reviews .ab-reviews-hero-title{grid-column:1;margin:0 0 var(--s-2)!important;padding:0!important;text-align:left!important}
+html.ov-v-product #ab-reviews .ab-reviews-hero-title::before{content:"Avis";display:block;font:500 var(--t-xs)/1.4 var(--f-texte);letter-spacing:.2em;text-transform:uppercase;color:var(--bordeaux)}
+html.ov-v-product #ab-reviews .ab-reviews-title{margin:8px 0 0!important;font:400 2.25rem/1.08 var(--f-display)!important;letter-spacing:-.01em!important;color:var(--encre)!important;text-align:left!important;text-transform:none!important}
+html.ov-v-product #ab-reviews .ab-reviews-summary-grid{display:contents!important}
+html.ov-v-product #ab-reviews .ab-reviews-col{margin:0!important;padding:0!important;border:0!important;text-align:left!important}
+html.ov-v-product #ab-reviews .ab-pd-star{display:inline-block;width:16px!important;height:16px!important;background:var(--or)!important;color:var(--or)!important;-webkit-mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M12 3.5l2.6 5.4 5.9.8-4.3 4.1 1 5.8L12 16.9l-5.2 2.7 1-5.8-4.3-4.1 5.9-.8z'/%3E%3C/svg%3E") center/contain no-repeat;mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M12 3.5l2.6 5.4 5.9.8-4.3 4.1 1 5.8L12 16.9l-5.2 2.7 1-5.8-4.3-4.1 5.9-.8z'/%3E%3C/svg%3E") center/contain no-repeat}
+html.ov-v-product #ab-reviews .ab-pd-star::before,html.ov-v-product #ab-reviews .ab-pd-star::after{display:none!important}
+/* etoile vide = contour (comme la maquette) */
+html.ov-v-product #ab-reviews .ab-pd-star-empty{-webkit-mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='1.2'%3E%3Cpath d='M12 3.5l2.6 5.4 5.9.8-4.3 4.1 1 5.8L12 16.9l-5.2 2.7 1-5.8-4.3-4.1 5.9-.8z'/%3E%3C/svg%3E") center/contain no-repeat;mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='1.2'%3E%3Cpath d='M12 3.5l2.6 5.4 5.9.8-4.3 4.1 1 5.8L12 16.9l-5.2 2.7 1-5.8-4.3-4.1 5.9-.8z'/%3E%3C/svg%3E") center/contain no-repeat}
+html.ov-v-product #ab-reviews .ab-reviews-avg-stars{display:inline-flex!important;gap:3px!important;justify-content:flex-start!important}
+html.ov-v-product #ab-reviews .ab-reviews-score-head{display:flex;flex-wrap:wrap;align-items:center;gap:12px;justify-content:flex-start!important}
+html.ov-v-product #ab-reviews .ab-reviews-score-out,html.ov-v-product #ab-reviews .ab-reviews-based-line{margin:0!important;font:400 14px/1.6 var(--f-texte)!important;color:var(--taupe)!important;text-decoration:none!important}
+html.ov-v-product #ab-reviews .ab-reviews-bar-fill{background:var(--bordeaux)!important}
+html.ov-v-product #ab-reviews .ab-reviews-bar-track{background:var(--sable)!important}
+html.ov-v-product #ab-reviews .ab-reviews-bar-count{color:var(--taupe)!important;font-size:12.5px!important}
+/* bouton = .btn.btn--ghost.btn--sm de la maquette, libelle francais */
+html.ov-v-product #ab-reviews .ab-reviews-write-btn{position:relative;display:inline-flex!important;align-items:center;justify-content:center;width:auto!important;min-height:42px!important;padding:0 18px!important;margin:0!important;background:transparent!important;color:var(--encre)!important;box-shadow:inset 0 0 0 1px var(--encre)!important;border:0!important;border-radius:var(--rayon)!important;font:500 12px/1.35 var(--f-texte)!important;letter-spacing:.16em!important;text-transform:uppercase!important;transition:background var(--d-2) var(--ease),color var(--d-2) var(--ease),transform var(--d-1) var(--ease)}
+html.ov-v-product #ab-reviews .ab-reviews-write-btn:hover{background:var(--encre)!important;color:var(--ivoire)!important}
+html.ov-v-product #ab-reviews .ab-reviews-write-btn:active{transform:scale(.975)}
+html.ov-v-product #ab-reviews .ab-reviews-write-btn > span{display:none!important}
+html.ov-v-product #ab-reviews .ab-reviews-write-btn::before{content:"Écrire un avis"}
+html.ov-v-product #ab-reviews .ab-reviews-list{min-width:0}
+/* sans avis : etoiles, texte et bouton de la maquette (« Aucun avis pour le moment… ») */
+html.ov-rev-empty #ab-reviews .ab-reviews-score-out,html.ov-rev-empty #ab-reviews .ab-reviews-based-line,html.ov-rev-empty #ab-reviews .ab-reviews-col-bars,html.ov-rev-empty #ab-reviews .ab-reviews-list{display:none!important}
+html.ov-rev-empty #ab-reviews .ab-reviews-empty{display:block!important;margin:0!important;padding:0!important;font-size:0!important;text-align:left!important}
+html.ov-rev-empty #ab-reviews .ab-reviews-empty::before{content:"Aucun avis pour le moment sur ce bijou.";display:block;font:400 16px/1.6 var(--f-texte);color:var(--encre)}
+html.ov-rev-empty #ab-reviews .ab-reviews-empty::after{content:"Vous l’avez reçu ? Votre avis aidera les prochaines clientes.";display:block;margin-top:12px;font:400 16px/1.6 var(--f-texte);color:var(--taupe)}
+html.ov-rev-empty #ab-reviews .ab-reviews-col-rating{order:1}
+html.ov-rev-empty #ab-reviews .ab-reviews-empty{order:2}
+html.ov-rev-empty #ab-reviews .ab-reviews-col-cta{order:3;margin-top:8px!important}
+html.ov-v-product #ab-reviews .ab-reviews-col-rating{order:1}
+html.ov-v-product #ab-reviews .ab-reviews-col-bars{order:2}
+html.ov-v-product #ab-reviews .ab-reviews-col-cta{order:3}
+html.ov-v-product #ab-reviews .ab-reviews-list{order:4}
+html.ov-v-product #ab-reviews .ab-reviews-empty{order:5}
+@media (min-width:900px){
+  /* titre a gauche, le reste a droite (grille 1fr / 1.4fr de la maquette) */
+  html.ov-v-product #ab-reviews{grid-template-columns:1fr 1.4fr;align-items:center;row-gap:12px}
+  html.ov-v-product #ab-reviews .ab-reviews-hero-title{grid-row:1 / span 6;margin:0!important}
+  html.ov-v-product #ab-reviews > :not(.ab-reviews-hero-title),html.ov-v-product #ab-reviews .ab-reviews-col{grid-column:2}
+}
+
+/* ---------- Page de commande : vrai formulaire EasyOrders, mise en page « .co » de la maquette ---------- */
+/* un seul en-tete : celui de la maquette en mode commande (le bandeau bordeaux d'EasyOrders est retire) */
+html.ov-is-checkout #__next header:has(> .checkout_header),
+html.ov-is-checkout #__next .checkout_bg_right,html.ov-is-checkout #__next .checkout_bg_left{display:none!important}
+html.ov-is-checkout #__next div.bg-white:has(> .checkout_container){background:transparent!important}
+html.ov-is-checkout #__next .checkout_container{display:grid!important;grid-template-columns:minmax(0,1fr)!important;gap:var(--s-6)!important;width:100%!important;max-width:var(--max)!important;margin-inline:auto!important;padding:var(--s-6) var(--gouttiere) var(--s-9)!important;background:none!important}
+html.ov-is-checkout #__next .checkout_container > *{min-width:0}
+html.ov-is-checkout #checkout-form{padding:0!important;margin:0!important;background:transparent!important;font-family:var(--f-texte);color:var(--encre)}
+html.ov-is-checkout #checkout-form > div{max-width:none!important;margin:0!important}
+@media (min-width:960px){
+  html.ov-is-checkout #__next .checkout_container{grid-template-columns:1.2fr 1fr!important;gap:var(--s-8)!important;align-items:start}
+  html.ov-is-checkout #checkout-form{grid-column:1!important;grid-row:1!important}
+  html.ov-is-checkout #ov-co-sum,html.ov-is-checkout #checkout-order-summary{grid-column:2!important;grid-row:1!important}
+}
+/* recapitulatif, titres et liens du theme remplaces par ceux de la maquette (une fois les notres poses) */
+html.ov-co-ready #checkout-order-summary,html.ov-co-ready .checkout_mobile_bottom_summary,html.ov-co-ready .checkout_store_pages,
+html.ov-co-ready .orvya-of-helper,html.ov-co-ready #contact-info-heading{display:none!important}
+/* champs = .field / .input de la maquette */
+html.ov-is-checkout #checkout-form .contact-info-heading > div{margin:0 0 var(--s-5)!important}
+html.ov-is-checkout #checkout-form .contact-info-heading > div > div{display:grid;gap:6px}
+html.ov-is-checkout #checkout-form label{display:block!important;margin:0 0 6px!important;font:500 13px/1.3 var(--f-texte)!important;letter-spacing:.04em!important;color:var(--encre)!important}
+html.ov-is-checkout #checkout-form .contact-info-heading > div > div > label{margin:0!important}
+html.ov-is-checkout #checkout-form label[for="phone"]::after{content:" (pour la confirmation)";font-size:smaller;font-weight:400;color:var(--taupe)}
+html.ov-is-checkout #checkout-form .relative.mt-1{margin-top:0!important}
+html.ov-is-checkout #checkout-form .global_input,html.ov-is-checkout #checkout-form .global_textarea{display:block;width:100%!important;height:52px!important;min-height:52px!important;padding:0 16px!important;background:#fff!important;border:1px solid var(--ligne-forte)!important;border-radius:var(--rayon)!important;font:400 16px/1.6 var(--f-texte)!important;color:var(--encre)!important;box-shadow:none!important;outline:none!important;transition:border-color var(--d-2) var(--ease),box-shadow var(--d-2) var(--ease)}
+html.ov-is-checkout #checkout-form .global_textarea{padding:13px 16px!important;line-height:1.5!important;resize:none!important;overflow:hidden}
+html.ov-is-checkout #checkout-form .global_input::placeholder,html.ov-is-checkout #checkout-form .global_textarea::placeholder{color:#757575;opacity:1}
+html.ov-is-checkout #checkout-form .global_input:hover,html.ov-is-checkout #checkout-form .global_textarea:hover{border-color:var(--encre)!important}
+html.ov-is-checkout #checkout-form .global_input:focus,html.ov-is-checkout #checkout-form .global_textarea:focus{border-color:var(--bordeaux)!important;box-shadow:0 0 0 3px rgba(99,0,0,.12)!important}
+/* ville (liste EasyOrders) = select.input de la maquette */
+html.ov-is-checkout #checkout-form .gov_select .select__control{min-height:52px!important;padding:0 4px 0 6px;background:#fff!important;border:1px solid var(--ligne-forte)!important;border-radius:var(--rayon)!important;box-shadow:none!important;cursor:pointer;transition:border-color var(--d-2) var(--ease),box-shadow var(--d-2) var(--ease)}
+html.ov-is-checkout #checkout-form .gov_select .select__control:hover{border-color:var(--encre)!important}
+html.ov-is-checkout #checkout-form .gov_select .select__control--is-focused{border-color:var(--bordeaux)!important;box-shadow:0 0 0 3px rgba(99,0,0,.12)!important}
+html.ov-is-checkout #checkout-form .gov_select .select__single-value,html.ov-is-checkout #checkout-form .gov_select .select__placeholder{font:400 16px/1.6 var(--f-texte)!important;color:var(--encre)!important}
+html.ov-is-checkout #checkout-form .gov_select .select__indicator-separator{display:none!important}
+html.ov-is-checkout #checkout-form .gov_select .select__dropdown-indicator{width:40px;padding:0!important;align-self:stretch;background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' fill='none' stroke='%231D1D1B' stroke-width='1.5'%3E%3Cpath d='M2 4.5l4 4 4-4'/%3E%3C/svg%3E") no-repeat center}
+html.ov-is-checkout #checkout-form .gov_select .select__dropdown-indicator svg{display:none!important}
+html.ov-is-checkout #checkout-form .contact-info-heading > div.mb-1{margin-bottom:var(--s-5)!important}
+html.ov-is-checkout #checkout-form .orvya-err{font:400 13px/1.5 var(--f-texte)!important;color:var(--erreur)!important}
+/* bouton = .btn.btn--full de la maquette : « Confirmer ma commande · total » ; il reste dans le formulaire (pas colle en bas) */
+html.ov-is-checkout #checkout-form #checkout-button{position:static!important;margin:28px 0 0!important;padding:0!important;background:transparent!important}
+html.ov-is-checkout #checkout-form button.checkout_buy_now{position:relative;display:inline-flex!important;align-items:center;justify-content:center;gap:10px;width:100%!important;min-height:52px!important;padding:10px 28px!important;margin:0!important;background:var(--bordeaux)!important;color:var(--ivoire)!important;border:0!important;border-radius:var(--rayon)!important;font:500 13px/1.35 var(--f-texte)!important;letter-spacing:.16em!important;text-transform:uppercase!important;opacity:1!important;transition:background var(--d-2) var(--ease),transform var(--d-1) var(--ease),box-shadow var(--d-2) var(--ease)!important}
+html.ov-is-checkout #checkout-form button.checkout_buy_now:hover{background:var(--bordeaux-700)!important;box-shadow:0 10px 24px -12px rgba(99,0,0,.7)!important}
+html.ov-is-checkout #checkout-form button.checkout_buy_now:active{transform:scale(.975)}
+html.ov-co-ready #checkout-form button.checkout_buy_now::after{content:"\00a0· " var(--ov-total,"")}

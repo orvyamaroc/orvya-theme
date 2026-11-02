@@ -26,7 +26,7 @@ var OVS = (function () {
       'boucles-oreilles': { name: 'Boucles d’oreilles', img: CDN + '1791667773890855965.webp' }
     },
     ORDER: ['bagues', 'colliers', 'bracelets', 'boucles-oreilles'],
-    PAGES: { livraison: '/pages/shipping-policy', retours: '/pages/refund-policy', garantie: '/pages/garantie', confidentialite: '/pages/privacy-policy', conditions: '/pages/terms-and-conditions' },
+    PAGES: { livraison: '/pages/shipping-policy', retours: '/pages/refund-policy', garantie: '/pages/garantie', confidentialite: '/pages/privacy-policy', conditions: '/pages/terms-and-conditions', faq: '/pages/faq', contact: '/pages/contact' },
     I: {
       arrow: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M5 12h14M13 6l6 6-6 6"/></svg>',
       left: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M15 6l-6 6 6 6"/></svg>',
@@ -48,15 +48,27 @@ var OVS = (function () {
       ig: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3.5" y="3.5" width="17" height="17" rx="4.5"/><circle cx="12" cy="12" r="4"/><circle cx="17.3" cy="6.7" r=".6" fill="currentColor"/></svg>',
       fb: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M14 8.5h2.5V5H14a3.5 3.5 0 00-3.5 3.5V11H8v3.5h2.5V21H14v-6.5h2.5L17 11h-3V9a.5.5 0 01.5-.5z"/></svg>',
       tt: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M14 3v11.5a3.5 3.5 0 11-3-3.46M14 3c.5 2.6 2.3 4.4 5 4.6"/></svg>',
+      plus: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 5v14M5 12h14"/></svg>',
+      minus: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M5 12h14"/></svg>',
+      phone: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3"><path d="M6.5 3.5h3l1.5 4-2 1.3a10 10 0 005.2 5.2l1.3-2 4 1.5v3a2 2 0 01-2.2 2A16 16 0 014.5 5.7a2 2 0 012-2.2z"/></svg>',
+      filter: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M4 7h10M18 7h2M4 17h4M12 17h8"/><circle cx="16" cy="7" r="2"/><circle cx="10" cy="17" r="2"/></svg>',
+      star: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2"><path d="M12 3.5l2.6 5.4 5.9.8-4.3 4.1 1 5.8L12 16.9l-5.2 2.7 1-5.8-4.3-4.1 5.9-.8z"/></svg>',
       wa: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 20l1.2-3.8A8 8 0 1112 20a8 8 0 01-4-1.1L4 20z"/><path d="M9 8.8c0 3 2.3 6 5.6 6.4l1-1.3-1.8-1-1 .8c-1-.4-2-1.4-2.4-2.4l.8-1-1-1.8-1.2 1z"/></svg>'
     }
+  };
+  /* Pages dessinees par le design a partir du chemin (meme fonction dans le HTML du head et dans orvya.js) ;
+     « » = page laissee au theme (accueil traite a part, commande, page de remerciement...) */
+  S.view = function (p) {
+    p = p.replace(/\/+$/, '');
+    return /^\/collections\/(bijoux|bagues|colliers|bracelets|boucles-oreilles)$/.test(p) ? 'collection' : /^\/products\/[^\/]+$/.test(p) ? 'product' :
+      p === '/search' ? 'search' : p === '/wishlist' ? 'favorites' : /^\/pages\/[^\/]+$/.test(p) ? 'info' : p === '/cart' ? 'cart' : '';
   };
   var I = S.I, P = S.PAGES;
   function ext(h) { return /^https:/.test(h) ? ' target="_blank" rel="noopener"' : ''; }
 
   /* Bandeau + en-tete (div.ov-top, sans boite : l'en-tete reste colle en haut de toute la page) */
   S.top = function () {
-    var help = [['Livraison', P.livraison], ['Retours &amp; échanges', P.retours], ['Garantie', P.garantie], ['Questions fréquentes', '/#ov-faq'], ['Suivre ma commande', S.WA_TRACK], ['Nous contacter', WA]];
+    var help = [['Livraison', P.livraison], ['Retours &amp; échanges', P.retours], ['Garantie', P.garantie], ['Questions fréquentes', P.faq], ['Suivre ma commande', S.WA_TRACK], ['Nous contacter', P.contact]];
     return '<div class="ov ov-top" id="ov-top">' +
       '<div class="annonce" role="region" aria-label="Informations de livraison"><div class="wrap">' +
         '<span>Livraison offerte<span class="annonce__plus"> partout au Maroc</span></span><span class="annonce__sep" aria-hidden="true"></span>' +
@@ -71,10 +83,11 @@ var OVS = (function () {
           '<div class="nav__drop"><button aria-haspopup="true">Aide ' + I.chev + '</button><div class="dropdown" role="menu">' +
           help.map(function (h) { return '<a href="' + h[1] + '" role="menuitem"' + ext(h[1]) + '>' + h[0] + '</a>'; }).join('') + '</div></div></nav>' +
         '<div class="header__right">' +
+          '<span class="co-secure"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="5" y="10" width="14" height="10" rx="1"/><path d="M8 10V7a4 4 0 018 0v3"/></svg>Paiement à la livraison</span>' +
           '<button class="icon-btn hide-sm" data-open="ov-search" aria-label="Rechercher">' + I.search + '</button>' +
           '<a class="icon-btn hide-sm" href="' + S.WA_TRACK + '" target="_blank" rel="noopener" aria-label="Suivre ma commande">' + I.user + '</a>' +
           '<a class="icon-btn" href="/wishlist" aria-label="Mes favoris">' + I.heart + '<span class="count" id="ov-fav-count">0</span></a>' +
-          '<button class="icon-btn" id="ov-cart-btn" aria-label="Ouvrir le panier">' + I.bag + '<span class="count" id="ov-cart-count">0</span></button>' +
+          '<button class="icon-btn" id="ov-cart-btn" data-open="ov-cart" aria-label="Ouvrir le panier" aria-controls="ov-cart" aria-expanded="false">' + I.bag + '<span class="count" id="ov-cart-count">0</span></button>' +
         '</div></div></header></div>';
   };
 
@@ -102,7 +115,9 @@ var OVS = (function () {
     return S.top() + '<template id="ov-hero-tpl"><main class="ov-home" id="ov-main">' + S.hero() + '</main></template>' +
       '<script>!function(){var d=document,r=d.documentElement,t=d.getElementById("ov-top"),p=location.pathname;' +
       'if(/[?&]ov=0/.test(location.search)||p.indexOf("/home-builder")===0){t.parentNode.removeChild(t);return}' +
-      'r.classList.add("ov-on");if(p==="/"){r.classList.add("ov-home");t.appendChild(d.getElementById("ov-hero-tpl").content.cloneNode(true))}}();</script>';
+      'r.classList.add("ov-on");if(p.indexOf("/checkout")===0)r.classList.add("ov-is-checkout");' +
+      /* pages dessinees par le design : le contenu du theme est masque des le premier affichage (voir orvya.js, route()) */
+      'var v=(' + String(S.view).replace(/\s+/g, ' ') + ')(p);if(v)r.classList.add("ov-view","ov-v-"+v);if(p==="/"){r.classList.add("ov-home");t.appendChild(d.getElementById("ov-hero-tpl").content.cloneNode(true))}}();</script>';
   };
   return S;
 })();
