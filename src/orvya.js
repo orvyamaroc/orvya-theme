@@ -497,7 +497,6 @@
     });
     syncCounts();
   }
-  mountEnd();
 
   /* ---------- 11. Tiroirs (maquette) ---------- */
   var openEl = null, lastFocus = null, sTimer;
@@ -998,9 +997,10 @@
   }
 
   /* ---------- 19. Suivi de la page (navigation de l'application sans rechargement) ---------- */
-  var tick = 0, lastCount = null;
+  var tick = 0, lastCount = null, started = false;
   function watch() {
     tick = 0;
+    if (!started) return;
     syncView();
     /* le compteur du theme a bouge (ajout fait par la boutique elle-meme) : on relit le panier */
     var c = $('#__next #header-cart-count'), n = c ? c.getAttribute('data-count-value') || c.textContent : null;
@@ -1011,8 +1011,12 @@
   new MutationObserver(function () { if (!tick) tick = setTimeout(watch, 120); }).observe(d.documentElement, { childList: true, subtree: true, attributes: true, attributeFilter: ['data-count-value'] });
   addEventListener('storage', function (e) { if (e.key === 'wish-list') { syncCounts(); syncFav(); } });
   addEventListener('popstate', function () { setTimeout(watch, 0); });
-  watch();
-  afterRender();
+  /* script charge en « async » : il peut demarrer avant la fin du HTML (sans attendre les ~700 Ko de l'application).
+     On dessine la page des que les donnees du serveur (__NEXT_DATA__, en fin de HTML) sont la : quelques millisecondes. */
+  /* pied de page pose avec la page (pas avant : il apparaitrait en haut puis serait pousse vers le bas) */
+  function start() { if (started) return; started = true; mountEnd(); watch(); afterRender(); }
+  if (d.getElementById('__NEXT_DATA__') || d.readyState !== 'loading') start();
+  else (function wait() { if (d.getElementById('__NEXT_DATA__') || d.readyState !== 'loading') start(); else setTimeout(wait, 25); })();
   /* panier du visiteur : lu quand la page est posee (ne passe pas avant la photo principale) */
   (w.requestIdleCallback || function (f) { setTimeout(f, 1200); })(function () { if (!cart) refreshCart(); }, { timeout: 2500 });
 })();
