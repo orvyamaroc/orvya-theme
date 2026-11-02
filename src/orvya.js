@@ -584,7 +584,7 @@
   function refreshCart() {
     var g = guest();
     if (!g) { cart = cart || []; renderCart(); return Promise.resolve(cart); }
-    cartP = Promise.all([fetch(API + 'cart-items/guest?guest_id=' + encodeURIComponent(g) + '&limit=100', { credentials: 'omit' }).then(function (r) { return r.ok ? r.json() : []; }), data()]).then(function (res) {
+    cartP = Promise.all([fetch(API + 'cart-items/guest?guest_id=' + encodeURIComponent(g) + '&limit=100&join=product', { credentials: 'omit' }).then(function (r) { return r.ok ? r.json() : []; }), data()]).then(function (res) {
       var items = Array.isArray(res[0]) ? res[0] : (res[0].data || []), list = res[1];
       cart = items.filter(function (x) { return x.in_cart !== false && x.product; }).map(function (x) {
         var b = bySlug(list, x.product.slug) || {};
@@ -627,14 +627,14 @@
   function themeCart(slug, act) {
     queue = queue.then(function () {
       return app().then(function () {
-        if (!$('[data-cart="root"]')) { var b = $('#__next .cart-btn'); if (b) b.click(); }
+        if (!themeCartOpen()) { var b = $('#__next .cart-btn'); if (b) b.click(); }
         return waitFor(function () { return $$('[data-cart="item"]').filter(function (li) { var a = li.querySelector('a[href]'); return a && a.getAttribute('href') === '/products/' + slug; })[0]; }, 5000);
       }).then(function (li) {
         if (!li) return;
         var q = $('[data-cart="item-quantity"]', li), before = q ? q.textContent : '';
         var btn = $('[data-cart="item-' + act + '"]', li); if (btn) btn.click();
         return waitFor(function () { return !li.isConnected || (q && q.textContent !== before); }, 5000);
-      }).then(function () { var c = $('[data-cart="close-button"]'); if (c) c.click(); return new Promise(function (r) { setTimeout(r, 250); }); });
+      }).then(function () { var r = themeCartOpen(), c = r && $('[data-cart="close-button"]', r); if (c) c.click(); return new Promise(function (ok) { setTimeout(ok, 250); }); });
     }).catch(function () {});
     return queue;
   }
@@ -674,8 +674,14 @@
     f.animate([{ transform: 'translate(0,0) scale(1)', opacity: 1 }, { transform: 'translate(' + dx * 0.55 + 'px,' + (dy * 0.35 - 60) + 'px) scale(.55)', opacity: 0.95, offset: 0.55 }, { transform: 'translate(' + dx + 'px,' + dy + 'px) scale(.12)', opacity: 0.2 }],
       { duration: 820, easing: 'cubic-bezier(.5,0,.3,1)' }).onfinish = function () { f.remove(); };
   }
-  /* le theme ouvre parfois son tiroir apres un ajout : il est invisible, on le referme */
-  function closeThemeCart() { return waitFor(function () { return $('[data-cart="close-button"]'); }, 1500).then(function (c) { if (c) c.click(); }); }
+  function themeCartOpen() { var r = $('[data-cart="root"]'); return r && /open/.test(r.getAttribute('data-headlessui-state') || 'open') ? r : null; }
+  /* le theme ouvre son tiroir apres un ajout (une fois sa requete faite) : il est invisible, on le referme (dans la file) */
+  function closeThemeCart() {
+    queue = queue.then(function () {
+      return waitFor(themeCartOpen, 4000).then(function (r) { var c = r && $('[data-cart="close-button"]', r); if (c) c.click(); return new Promise(function (ok) { setTimeout(ok, 250); }); });
+    }).catch(function () {});
+    return queue;
+  }
   /* bouton d'ajout rapide d'une carte du theme pour ce produit (grilles et suggestions masquees de la boutique) */
   function themeQuick(slug) {
     var links = $$('#__next a[href="/products/' + slug + '"]');
@@ -701,11 +707,8 @@
   }
   function themePdpBtn(re) { return $$('#__next #product-id button').filter(function (b) { return re.test(b.textContent) && !b.closest('.ab-pgrid-card'); })[0]; }
   function added(name) {
-    var before = cartQty();
-    closeThemeCart();
-    return waitFor(function () { return false; }, 400).then(refreshCart).then(function () {
-      if (cartQty() === before) return new Promise(function (r) { setTimeout(r, 900); }).then(refreshCart);
-    }).then(function () { toast(esc(name) + ' ajouté au panier', 'Voir', function () { open('ov-cart'); }); });
+    toast(esc(name) + ' ajouté au panier', 'Voir', function () { open('ov-cart'); });
+    return closeThemeCart().then(refreshCart);
   }
 
   /* ---------- 14. Favoris : la liste d'envies de la boutique (navigateur, page /wishlist), meme format que le theme ---------- */
