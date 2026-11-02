@@ -921,7 +921,8 @@
       if (curView !== 'checkout') return;
       if (!items.length) { root.classList.add('ov-co-empty'); mountPage('<div class="wrap">' + emptyCart() + '</div>'); return; }
       root.classList.remove('ov-co-empty');
-      app().then(function () { return waitFor(function () { return $('#__next form#checkout-form'); }, 10000); }).then(decorateCheckout);
+      /* formulaire pris en main par React (ses proprietes internes sont posees) : on peut placer nos blocs a cote */
+      waitFor(function () { var f = $('#__next form#checkout-form'); return f && Object.keys(f).some(function (k) { return k.indexOf('__react') === 0; }) && f; }, 15000).then(decorateCheckout);
     });
   }
   d.addEventListener('click', function (e) {
