@@ -677,11 +677,9 @@
     f.animate([{ transform: 'translate(0,0) scale(1)', opacity: 1 }, { transform: 'translate(' + dx * 0.55 + 'px,' + (dy * 0.35 - 60) + 'px) scale(.55)', opacity: 0.95, offset: 0.55 }, { transform: 'translate(' + dx + 'px,' + dy + 'px) scale(.12)', opacity: 0.2 }],
       { duration: 820, easing: 'cubic-bezier(.5,0,.3,1)' }).onfinish = function () { f.remove(); };
   }
-  /* le tiroir du theme reste dans la page une fois ferme (pousse hors de l'ecran, attribut « open » perime) : ouvert = panneau a l'ecran */
-  function themeCartOpen() {
-    var r = $('[data-cart="root"]'), p = r && $('[data-cart="panel"]', r); if (!p) return null;
-    var b = p.getBoundingClientRect(); return b.width && b.right > 1 && b.left < innerWidth - 1 ? r : null;
-  }
+  /* le tiroir du theme reste dans la page une fois ferme (attribut « open » perime, panneau deplace par le code du head) :
+     il est ouvert tant que l'application est rendue inerte derriere lui */
+  function themeCartOpen() { var r = $('[data-cart="root"]'); return r && (next.inert || next.getAttribute('aria-hidden') === 'true') ? r : null; }
   /* le theme ouvre son tiroir apres un ajout (une fois sa requete faite) : il est invisible, on le referme (dans la file) */
   function closeThemeCart() {
     queue = queue.then(function () {
