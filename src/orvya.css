@@ -1,0 +1,26 @@
+/* ORVYA — raccords entre la maquette (reprise telle quelle par build.js) et la boutique EasyOrders.
+   Seul ce fichier contient des regles propres a la boutique ; le reste du design est celui de la maquette. */
+
+/* Bloc du haut (bandeau, en-tete, accueil) : il ne cree pas de boite, pour que l'en-tete reste colle en haut
+   de toute la page comme dans la maquette (position sticky par rapport a la page, pas a un conteneur). */
+.ov.ov-top{display:contents}
+.ov.ov-end{overflow:visible}
+.ov [hidden]{display:none!important}
+html.ov-on,html.ov-on body{background:var(--ivoire)}
+html.ov-locked,html.ov-locked body{overflow:hidden}
+
+/* Parties du theme remplacees par celles de la maquette (le theme reste charge : panier, commande, liste d'envies) */
+html.ov-on #__next .ab-announce,
+html.ov-on #__next .ab-header-sticky-wrap,
+html.ov-on #__next footer.ab-footer{display:none!important}
+/* Accueil : les sections du theme et la copie statique du hero (ORVYA-PERF) laissent la place a celles de la maquette */
+html.ov-home #__next main.container_class,
+html.ov-home #orvya-ph{display:none!important}
+html.ov-home #__next .app_container{min-height:0!important}
+
+/* Le theme impose sa police (Jost) a tous les liens : dans nos blocs, chaque element herite comme dans la maquette */
+.ov *{font-family:inherit}
+/* Le code du head (ORVYA-CLOTHING) met un contour noir a tous les champs de formulaire : nos champs gardent ceux de la maquette */
+.ov .input{border-color:var(--ligne-forte)!important}
+.ov .input:hover{border-color:var(--encre)!important}
+.ov .input:focus{border-color:var(--bordeaux)!important}
