@@ -899,6 +899,17 @@
       }).join('') + '<div style="margin-top:12px">' + summaryRows() + '</div>' + miniAssure() + '</div></div></aside></div></div>';
   }
   var coObs = null;
+  /* exemples dans les champs (maquette) et texte du bouton : ORVYA-ORDER (code du head) pose en ligne Jost 700 / 0.95rem
+     et ne repasse pas si une police est deja posee en ligne : on y met celle du bouton .btn de la maquette */
+  function coFields(form) {
+    var ph = { phone: '06 12 34 56 78', address: 'Quartier, rue, numéro' };
+    Object.keys(ph).forEach(function (k) { var i = form.querySelector('[name="' + k + '"]'); if (i && !i.getAttribute('placeholder')) i.setAttribute('placeholder', ph[k]); });
+    var b = form.querySelector('button.checkout_buy_now'), st = b && b.style;
+    if (st && st.getPropertyValue('font-weight') !== '500') {
+      st.setProperty('font-family', 'var(--f-texte)', 'important'); st.setProperty('font-weight', '500', 'important');
+      st.setProperty('font-size', '13px', 'important'); st.setProperty('letter-spacing', '.16em', 'important'); st.setProperty('line-height', '1.35', 'important');
+    }
+  }
   function decorateCheckout() {
     if (curView !== 'checkout') return;
     var form = $('#__next form#checkout-form'), box = $('#__next .checkout_container');
@@ -911,10 +922,9 @@
     if (btnBox && !$('#ov-co-pay', form)) btnBox.insertAdjacentHTML('beforebegin', '<div class="ov ov-dc" id="ov-co-pay"><div class="co ov-dc"><h2 style="margin-top:40px">Paiement</h2>' +
       '<div class="pay-opt"><span class="dot" aria-hidden="true"></span><div><strong>Paiement en espèces à la livraison</strong><span>Vous ouvrez le colis, vérifiez votre bijou, puis payez le livreur.</span></div></div>' +
       '<div class="sum-row" style="margin-top:20px"><span>Livraison</span><span class="free" style="color:var(--ok);font-weight:500">Offerte · 2 à 4 jours ouvrés</span></div></div></div>');
-    var ph = { phone: '06 12 34 56 78', address: 'Quartier, rue, numéro' };
-    Object.keys(ph).forEach(function (k) { var i = form.querySelector('[name="' + k + '"]'); if (i && !i.getAttribute('placeholder')) i.setAttribute('placeholder', ph[k]); });
+    coFields(form);
     markLoaded();
-    if (!coObs) { coObs = new MutationObserver(function () { if (!$('#ov-co-head') || !$('#ov-co-pay') || !$('#ov-co-sum-wrap')) decorateCheckout(); }); coObs.observe(next, { childList: true, subtree: true }); }
+    if (!coObs) { coObs = new MutationObserver(function () { var f = $('#__next form#checkout-form'); if (!$('#ov-co-head') || !$('#ov-co-pay') || !$('#ov-co-sum-wrap')) decorateCheckout(); else if (f) coFields(f); }); coObs.observe(next, { childList: true, subtree: true }); }
   }
   function initCheckout() {
     refreshCart().then(function (items) {
