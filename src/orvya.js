@@ -214,7 +214,7 @@
       '<footer class="footer" id="ov-footer"><div class="wrap"><div class="footer__grid">' +
         '<div class="footer__brand"><img src="' + ASSETS + 'orvya-logo-gold-transparent-800.png" alt="ORVYA" width="101" height="34" loading="lazy">' +
           '<p>Bijoux en acier inoxydable à finition dorée. Livraison offerte partout au Maroc, paiement à la livraison.</p><div class="socials">' +
-          '<a href="https://www.instagram.com/orvya.official/" target="_blank" rel="noopener" aria-label="Instagram">' + I.ig + '</a>' +
+          '<a href="https://www.instagram.com/orvya.ma/" target="_blank" rel="noopener" aria-label="Instagram">' + I.ig + '</a>' +
           '<a href="https://www.facebook.com/orvya.official" target="_blank" rel="noopener" aria-label="Facebook">' + I.fb + '</a>' +
           '<a href="https://www.tiktok.com/@orvya.official" target="_blank" rel="noopener" aria-label="TikTok">' + I.tt + '</a>' +
           '<a href="' + WA + '" target="_blank" rel="noopener" aria-label="WhatsApp">' + I.wa + '</a></div></div>' +
