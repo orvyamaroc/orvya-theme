@@ -97,7 +97,9 @@ html.ov-rev-empty #ab-reviews .ab-reviews-col-cta{order:3;margin-top:8px!importa
 @media (min-width:900px){
   /* titre a gauche, le reste a droite (grille 1fr / 1.4fr de la maquette) */
   html.ov-v-product #ab-reviews{grid-template-columns:1fr 1.4fr;align-items:center;row-gap:12px}
-  html.ov-v-product #ab-reviews .ab-reviews-hero-title{grid-row:1 / span 6;margin:0!important}
+  /* le titre occupe la hauteur des lignes visibles a droite (4 avec avis, 3 sans) : il est centre sur elles */
+  html.ov-v-product #ab-reviews .ab-reviews-hero-title{grid-row:1 / span 4;margin:0!important}
+  html.ov-rev-empty #ab-reviews .ab-reviews-hero-title{grid-row:1 / span 3}
   html.ov-v-product #ab-reviews > :not(.ab-reviews-hero-title),html.ov-v-product #ab-reviews .ab-reviews-col{grid-column:2}
 }
 
