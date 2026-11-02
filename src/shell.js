@@ -14,6 +14,10 @@ var OVS = (function () {
     WA_TRACK: WA + '?text=' + encodeURIComponent('Bonjour, je souhaite suivre ma commande.'),
     LOGO: CDN + '1791664966379343969.webp',
     HERO: CDN + '1791667426966739316.webp',
+    /* meme photo en 768 px (assets/hero-768.webp, 23 Ko au lieu de 49) : les telephones la recoivent, les ecrans haute
+       definition et les ordinateurs gardent la grande. Adresse figee sur la version qui l'a publiee (fichier immuable). */
+    HERO_768: 'https://cdn.jsdelivr.net/gh/orvyamaroc/orvya-theme@v1.0.5/assets/hero-768.webp',
+    HERO_SIZES: '(min-width: 900px) 55vw, 105vw',
     CATS: {
       bijoux: { name: 'Tous les bijoux', img: CDN + '1791668681520009646.webp' },
       bagues: { name: 'Bagues', img: CDN + '1791667646678676581.webp' },
@@ -81,7 +85,15 @@ var OVS = (function () {
       '<h1 class="display hero-in" style="--d:1">L’éclat qui<br><em>vous ressemble</em></h1>' +
       '<p class="lead hero-in" style="--d:2">Des pièces fines, pensées pour sublimer chaque instant, du matin au soir.</p>' +
       '<div class="hero__cta hero-in" style="--d:3"><a class="btn" href="/collections/bijoux">Découvrir la collection</a><a class="link-u" href="' + P.livraison + '">Livraison offerte · Paiement à la livraison</a></div></div>' +
-      '<div class="hero__media hero-in-media"><div class="arch"><img src="' + S.HERO + '" alt="Femme portant un collier et des bagues dorés sur une robe bordeaux" fetchpriority="high" decoding="async" data-parallax="0.06"></div></div></div></section>';
+      '<div class="hero__media hero-in-media"><div class="arch"><img src="' + S.HERO + '" srcset="' + S.HERO_768 + ' 768w, ' + S.HERO + ' 1536w" sizes="' + S.HERO_SIZES + '" alt="Femme portant un collier et des bagues dorés sur une robe bordeaux" fetchpriority="high" decoding="async" data-parallax="0.06"></div></div></div></section>';
+  };
+
+  /* Prechargement de la photo du hero, place tout en haut du code du head (avant les feuilles de style) : la photo part
+     des la lecture de la page. Memes tailles que l'image, donc le navigateur prend le meme fichier. */
+  S.preload = function () {
+    return '<script>!function(){if(location.pathname==="/"){var l=document.createElement("link");l.rel="preload";l.as="image";' +
+      'l.href="' + S.HERO + '";l.setAttribute("imagesrcset","' + S.HERO_768 + ' 768w, ' + S.HERO + ' 1536w");l.setAttribute("imagesizes","' + S.HERO_SIZES + '");' +
+      'l.setAttribute("fetchpriority","high");document.head.appendChild(l)}}();</script>';
   };
 
   /* Ce qui part dans le code du head : en-tete pour toutes les pages ; hero pose tout de suite sur l'accueil

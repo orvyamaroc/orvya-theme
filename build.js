@@ -77,6 +77,7 @@ function scopeMockupCss(css) {
   delete require.cache[require.resolve('./src/shell.js')];
   const shell = require('./src/shell.js').staticShell();
   fs.writeFileSync(path.join(__dirname, 'dist', 'shell.html'), shell);
+  fs.writeFileSync(path.join(__dirname, 'dist', 'preload.html'), require('./src/shell.js').preload());
   const kb = s => (Buffer.byteLength(s) / 1024).toFixed(1) + ' Ko';
   console.log('orvya.min.css', kb(css), '| orvya.min.js', kb(js.code), '| shell.html', kb(shell));
 })().catch(e => { console.error('ECHEC :', e.message); process.exit(1); });
