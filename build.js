@@ -68,8 +68,15 @@ function scopeMockupCss(css) {
   const own = fs.readFileSync(path.join(__dirname, 'src', 'orvya.css'), 'utf8');
   const css = csso.minify(scopeMockupCss(mockCss) + '\n' + own, { restructure: false, comments: false }).css;
   fs.writeFileSync(path.join(__dirname, 'dist', 'orvya.min.css'), css);
-  const js = await minify(fs.readFileSync(path.join(__dirname, 'src', 'orvya.js'), 'utf8'), { compress: { passes: 2 }, mangle: true, format: { comments: false } });
+  // gabarits partages (src/shell.js) + comportements (src/orvya.js), dans une seule portee
+  const shellSrc = fs.readFileSync(path.join(__dirname, 'src', 'shell.js'), 'utf8');
+  const bundle = '(function(){\n' + shellSrc + '\n' + fs.readFileSync(path.join(__dirname, 'src', 'orvya.js'), 'utf8') + '\n})();';
+  const js = await minify(bundle, { compress: { passes: 2 }, mangle: true, format: { comments: false } });
   fs.writeFileSync(path.join(__dirname, 'dist', 'orvya.min.js'), js.code);
+  // haut de page statique pour le code du head EasyOrders (bloc ORVYA-SHELL, recopie par head-code/build_headcode.js)
+  delete require.cache[require.resolve('./src/shell.js')];
+  const shell = require('./src/shell.js').staticShell();
+  fs.writeFileSync(path.join(__dirname, 'dist', 'shell.html'), shell);
   const kb = s => (Buffer.byteLength(s) / 1024).toFixed(1) + ' Ko';
-  console.log('orvya.min.css', kb(css), '| orvya.min.js', kb(js.code));
+  console.log('orvya.min.css', kb(css), '| orvya.min.js', kb(js.code), '| shell.html', kb(shell));
 })().catch(e => { console.error('ECHEC :', e.message); process.exit(1); });

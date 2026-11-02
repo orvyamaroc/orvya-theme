@@ -4,6 +4,8 @@
 /* Bloc du haut (bandeau, en-tete, accueil) : il ne cree pas de boite, pour que l'en-tete reste colle en haut
    de toute la page comme dans la maquette (position sticky par rapport a la page, pas a un conteneur). */
 .ov.ov-top{display:contents}
+/* le haut de page est ecrit dans le code du head (dans #__next) : son conteneur ne cree pas de boite non plus */
+#__next > div:has(> #ov-top){display:contents}
 .ov.ov-end{overflow:visible}
 .ov [hidden]{display:none!important}
 html.ov-on,html.ov-on body{background:var(--ivoire)}
