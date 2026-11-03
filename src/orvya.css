@@ -7,6 +7,8 @@
 /* le haut de page est ecrit dans le code du head (dans #__next) : son conteneur ne cree pas de boite non plus */
 #__next > div:has(> #ov-top){display:contents}
 .ov.ov-end{overflow:visible}
+/* copie du haut de page recreee par React dans l'application apres une erreur d'hydratation : la vraie est sortie (orvya.js) */
+html.ov-out #__next .ov-top,html.ov-out #__next #ov-hero-tpl{display:none!important}
 .ov [hidden]{display:none!important}
 /* blocs poses a cote des champs EasyOrders (page de commande) : sans boite, leurs enfants prennent place dans la grille */
 .ov-dc{display:contents!important}

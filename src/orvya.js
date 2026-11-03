@@ -81,6 +81,15 @@
   /* ---------- 3. En-tete et bandeau (maquette, liens de la boutique) ---------- */
   var top = d.getElementById('ov-top');
   if (!top) { top = el(OVS.top()); d.body.insertBefore(top, next); }
+  /* Le haut de page arrive dans le HTML a l'interieur de l'application (code du head, dans #__next). Si React redessine
+     un jour la page (erreur d'hydratation : c'etait le cas sur la fiche produit jusqu'au 2026-11-03, cause corrigee dans
+     ORVYA-CLOTHING), il recree ce bloc et efface le notre avec la page de la maquette. Filet de securite : des que notre
+     bloc quitte la page, il est remis juste avant l'application (avant l'affichage suivant : rien ne saute) et la copie
+     recreee par React est masquee (html.ov-out). */
+  if (next.contains(top) && w.MutationObserver) new MutationObserver(function () {
+    if (top.isConnected) return;
+    d.body.insertBefore(top, next); root.classList.add('ov-out');
+  }).observe(next, { childList: true, subtree: true });
   root.classList.add('ov-on');
   var header = $('#ov-header', top);
 
