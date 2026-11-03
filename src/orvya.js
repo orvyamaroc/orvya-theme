@@ -718,7 +718,15 @@
       })();
     });
   }
-  function themePdpBtn(re) { return $$('#__next #product-id button').filter(function (b) { return re.test(b.textContent) && !b.closest('.ab-pgrid-card'); })[0]; }
+  /* boutons de la fiche EasyOrders, trouves par leur classe : leur texte change (la traduction du code du head renomme
+     « Acheter maintenant » en « Confirmer ma commande » ; chercher le texte envoyait sur une commande au panier vide) */
+  function themePdpBtn(kind) {
+    var root0 = $('#__next #product-id'); if (!root0) return null;
+    if (kind === 'buy') return $('button.checkout_btn', root0);
+    var q = $('.quantity_btn_container', root0);
+    return $('button.add_to_cart_btn', root0) || (q && q.parentElement.querySelector(':scope > button')) ||
+      $$('button', root0).filter(function (x) { return /ajouter au panier/i.test(x.textContent) && !x.closest('.ab-pgrid-card'); })[0] || null;
+  }
   function added(name) {
     toast(esc(name) + ' ajouté au panier', 'Voir', function () { open('ov-cart'); });
     return closeThemeCart().then(refreshCart);
@@ -775,7 +783,7 @@
       var qty = +$('#ov-qty').textContent, src = $('.ov .pdp-main');
       t.classList.add('is-loading');
       app().then(function () { return setThemeQty(qty); }).then(function () {
-        var b = themePdpBtn(/ajouter au panier/i);
+        var b = themePdpBtn('add');
         if (!b) { t.classList.remove('is-loading'); location.reload(); return; }
         b.click();
         t.classList.remove('is-loading'); t.classList.add('is-done'); flyToCart(src);
@@ -790,9 +798,12 @@
       var q2 = $('#ov-qty') ? +$('#ov-qty').textContent : 1;
       t.classList.add('is-loading');
       app().then(function () { return setThemeQty(q2); }).then(function () {
-        var b = themePdpBtn(/acheter|commander/i);
-        if (b) b.click(); else location.href = '/checkout';
-        setTimeout(function () { t.classList.remove('is-loading'); }, 2500);
+        var b = themePdpBtn('buy');
+        if (b) { b.click(); setTimeout(function () { t.classList.remove('is-loading'); }, 2500); return; }
+        /* sans bouton d'achat : ajout au panier puis page de commande (jamais une commande au panier vide) */
+        var add = themePdpBtn('add');
+        if (!add) { t.classList.remove('is-loading'); location.reload(); return; }
+        add.click(); closeThemeCart().then(refreshCart).then(function () { location.href = '/checkout'; });
       });
       return;
     }
