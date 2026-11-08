@@ -57,11 +57,11 @@ var OVS = (function () {
     }
   };
   /* Pages dessinees par le design a partir du chemin (meme fonction dans le HTML du head et dans orvya.js) ;
-     « » = page laissee au theme (accueil traite a part, commande, page de remerciement...) */
+     « » = page laissee au theme (accueil traite a part, commande, suivi...) ; /thanks = page de remerciement (2026-11-08) */
   S.view = function (p) {
     p = p.replace(/\/+$/, '');
     return /^\/collections\/(bijoux|bagues|colliers|bracelets|boucles-oreilles)$/.test(p) ? 'collection' : /^\/products\/[^\/]+$/.test(p) ? 'product' :
-      p === '/search' ? 'search' : p === '/wishlist' ? 'favorites' : /^\/pages\/[^\/]+$/.test(p) ? 'info' : p === '/cart' ? 'cart' : '';
+      p === '/search' ? 'search' : p === '/wishlist' ? 'favorites' : /^\/pages\/[^\/]+$/.test(p) ? 'info' : p === '/cart' ? 'cart' : p === '/thanks' ? 'thanks' : '';
   };
   var I = S.I, P = S.PAGES;
   function ext(h) { return /^https:/.test(h) ? ' target="_blank" rel="noopener"' : ''; }

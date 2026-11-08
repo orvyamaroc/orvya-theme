@@ -150,3 +150,46 @@ html.ov-is-checkout #checkout-form button.checkout_buy_now{position:relative;dis
 html.ov-is-checkout #checkout-form button.checkout_buy_now:hover{background:var(--bordeaux-700)!important;box-shadow:0 10px 24px -12px rgba(99,0,0,.7)!important}
 html.ov-is-checkout #checkout-form button.checkout_buy_now:active{transform:scale(.975)}
 html.ov-co-ready #checkout-form button.checkout_buy_now::after{content:"\00a0· " var(--ov-total,"")}
+
+/* Page de remerciement (/thanks), 2026-11-08 : fond = pied de page (--bordeaux-900), logo dore, Cormorant + Jost.
+   Le bloc EasyOrders (qui envoie l'evenement Purchase) reste monte sous la page, masque par la regle html.ov-view. */
+.ov .thx{background:var(--bordeaux-900);color:var(--ivoire);padding:clamp(40px,7vw,88px) 0 clamp(48px,7vw,96px);border-bottom:1px solid rgba(217,188,134,.1)}
+.ov .thx__head{text-align:center;max-width:620px;margin:0 auto clamp(32px,5vw,56px)}
+.ov .thx__logo{display:block;width:112px;height:auto;margin:0 auto 26px}
+.ov .thx__seal{display:grid;place-items:center;width:52px;height:52px;margin:0 auto 20px;border:1px solid var(--or-clair);border-radius:50%;color:var(--or-clair)}
+.ov .thx__seal svg{width:22px;height:22px}
+.ov .thx .eyebrow{color:var(--or-clair);margin-bottom:10px}
+.ov .thx__title{margin:0 0 14px;font:400 var(--t-h2)/1.08 var(--f-display);color:var(--ivoire)}
+.ov .thx__lede{margin:0;color:rgba(255,252,239,.8);font-size:var(--t-md);line-height:1.6}
+.ov .thx__grid{display:grid;gap:20px;max-width:1040px;margin:0 auto}
+@media (min-width:900px){.ov .thx__grid{grid-template-columns:1fr 1fr;gap:28px;align-items:start}}
+.ov .thx h2{margin:0;font:400 var(--t-h3)/1.2 var(--f-display)}
+.ov .thx__panel{padding:clamp(22px,3vw,32px);border:1px solid rgba(217,188,134,.24);border-radius:var(--rayon)}
+.ov .thx__panel h2{margin-bottom:22px;color:var(--ivoire)}
+.ov .thx__steps{display:grid;gap:22px;margin:0;padding:0;list-style:none}
+.ov .thx__steps li{display:grid;grid-template-columns:34px 1fr;gap:14px}
+.ov .thx__num{display:grid;place-items:center;width:34px;height:34px;border:1px solid var(--or-clair);border-radius:50%;color:var(--or-clair);font:500 13px/1 var(--f-texte)}
+.ov .thx__steps strong{display:block;margin:6px 0 4px;font-weight:500;color:var(--ivoire)}
+.ov .thx__steps p{margin:0;color:rgba(255,252,239,.74);font-size:var(--t-sm);line-height:1.6}
+.ov .thx__tel{color:var(--ivoire);white-space:nowrap}
+.ov .thx__help{margin:24px 0 0;padding-top:18px;border-top:1px solid rgba(217,188,134,.18);color:rgba(255,252,239,.74);font-size:var(--t-sm);line-height:1.6}
+.ov .thx__help a,.ov .thx__cta .link-u{color:var(--or-clair)}
+.ov .thx__help a:hover,.ov .thx__cta .link-u:hover{color:var(--ivoire)}
+.ov .thx__card{padding:clamp(22px,3vw,32px);background:var(--ivoire);color:var(--encre);border-radius:var(--rayon);box-shadow:var(--ombre-2)}
+.ov .thx__card-head{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:8px}
+.ov .thx__status{padding:4px 10px;border:1px solid var(--ligne-forte);border-radius:999px;color:var(--taupe);font-size:11.5px;letter-spacing:.08em;text-transform:uppercase;white-space:nowrap}
+.ov .thx__line{display:grid;grid-template-columns:56px 1fr auto;gap:14px;align-items:center;padding:14px 0;border-bottom:1px solid var(--ligne)}
+.ov .thx__line img{width:56px;height:70px;object-fit:cover;border-radius:var(--rayon);background:var(--sable)}
+.ov .thx__name{font:400 18px/1.25 var(--f-display)}
+.ov .thx__qty{margin-top:4px;color:var(--taupe);font-size:var(--t-sm)}
+.ov .thx__price{white-space:nowrap;font-size:var(--t-sm)}
+.ov .thx__rows{display:grid;gap:9px;margin-top:16px;font-size:var(--t-sm)}
+.ov .thx__rows > div{display:flex;justify-content:space-between;gap:16px}
+.ov .thx__rows > div > span:last-child{text-align:right}
+.ov .thx__free{color:var(--ok)}
+.ov .thx__total{margin-top:2px;padding-top:11px;border-top:1px solid var(--ligne);font-size:var(--t-base);font-weight:500}
+.ov .thx__ship{margin-top:20px;padding-top:18px;border-top:1px solid var(--ligne)}
+.ov .thx__ship h3{margin:0 0 8px;font:500 var(--t-xs)/1.4 var(--f-texte);letter-spacing:.2em;text-transform:uppercase;color:var(--bordeaux)}
+.ov .thx__ship p{margin:0;color:var(--taupe);font-size:var(--t-sm);line-height:1.7;overflow-wrap:anywhere}
+.ov .thx__cta{display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:14px 28px;margin-top:clamp(32px,5vw,52px)}
+@media (max-width:520px){.ov .thx__cta .btn{width:100%}.ov .thx__line{grid-template-columns:48px 1fr auto}.ov .thx__line img{width:48px;height:60px}}

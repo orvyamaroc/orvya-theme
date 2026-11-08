@@ -51,7 +51,7 @@
   function fmt(n) { return Number(n).toLocaleString('fr-FR') + ' MAD'; }
   function norm(s) { return String(s).toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '').replace(/[’']/g, ' '); }
   function plural(n, one, many) { return n + ' ' + (n > 1 ? many : one); }
-  function img(src, alt, cls, extra) { return '<img src="' + src + '" alt="' + esc(alt) + '" class="fade-img ' + (cls || '') + '" loading="lazy" decoding="async" ' + (extra || '') + '>'; }
+  function img(src, alt, cls, extra, eager) { return '<img src="' + src + '" alt="' + esc(alt) + '" class="fade-img ' + (cls || '') + '" loading="' + (eager ? 'eager" fetchpriority="high' : 'lazy') + '" decoding="async" ' + (extra || '') + '>'; }
   function el(html) { var t = d.createElement('template'); t.innerHTML = html.trim(); return t.content.firstChild; }
   /* Titre decoupe en mots (animation « mots qui montent ») ; les mots entre [[ ]] passent en italique */
   function split(s) {
@@ -109,10 +109,10 @@
     return '<a class="cat-card" href="/collections/' + k + '" data-rv style="--i:' + i + '"><div class="arch" data-rv="arch" style="--i:' + i + '">' + img(CATS[k].img, CATS[k].name) + '</div><h3 class="cat-card__name">' + CATS[k].name + '</h3><span class="cat-card__meta" data-count="' + k + '">' + (n == null ? 'Découvrir' : plural(n, 'pièce', 'pièces')) + ' ' + I.arrow + '</span></a>';
   }
   function favOn(id) { return wishIds().indexOf(id) >= 0; }
-  function card(p, i) {
+  function card(p, i, eager) {
     var on = favOn(p.id);
     return '<article class="card" data-rv style="--i:' + (i % 4) + '" data-fly-root>' +
-      '<a class="card__media" href="/products/' + p.slug + '" tabindex="-1" aria-hidden="true">' + img(p.img, p.name, 'card__img') + '</a>' +
+      '<a class="card__media" href="/products/' + p.slug + '" tabindex="-1" aria-hidden="true">' + img(p.img, p.name, 'card__img', '', eager === true) + '</a>' +
       '<button class="fav' + (on ? ' is-on' : '') + '" data-fav="' + p.id + '" aria-pressed="' + on + '" aria-label="' + (on ? 'Retirer des' : 'Ajouter aux') + ' favoris : ' + esc(p.name) + '">' + I.heart + '</button>' +
       '<button class="card__quick" data-add="' + p.slug + '" aria-label="Ajouter au panier : ' + esc(p.name) + '">' + I.bag + '<span>Ajouter au panier</span></button>' +
       '<div class="card__body"><p class="card__cat">' + esc(p.cat) + '</p><h3 class="card__name"><a href="/products/' + p.slug + '">' + esc(p.name) + '</a></h3><p class="card__price">' + fmt(p.price) + '</p></div></article>';
@@ -223,7 +223,9 @@
   function gridHTML(list) {
     if (!list) return '<div class="grid grid--4">' + [0, 1, 2, 3].map(skelCard).join('') + '</div>';
     if (!list.length) return '<div class="empty"><div class="empty__ico">' + I.search + '</div><h2>Aucun bijou ne correspond</h2><p>Essayez d’enlever un filtre : notre collection s’agrandit régulièrement.</p><button class="btn" data-filter-reset>Effacer les filtres</button></div>';
-    return '<div class="grid grid--4">' + list.map(card).join('') + '</div>';
+    /* 2026-11-08 : les 2 premieres photos (au-dessus de la ligne de flottaison sur telephone) sont chargees tout de suite, en priorite :
+       c'etait l'element LCP des pages collection (13-14 s simules sur mobile) */
+    return '<div class="grid grid--4">' + list.map(function (p, i) { return card(p, i, i < 2); }).join('') + '</div>';
   }
   function vCollection(slug) {
     var c = CATS[slug];
@@ -463,6 +465,52 @@
       '<h2>Cette page s’est égarée</h2><p>Le lien est peut-être ancien. Reprenez depuis nos collections.</p><a class="btn" href="/collections/bijoux">Voir tous les bijoux</a></div></div>';
   }
 
+  /* ---------- 9 bis. Page de remerciement (/thanks?order_id=…), 2026-11-08 ----------
+     Fond = couleur du pied de page (--bordeaux-900), logo dore, titres Cormorant, textes Jost. La commande est lue sur l'API
+     publique de la boutique (celle qu'utilise la page EasyOrders). Le bloc EasyOrders reste monte mais masque : c'est lui qui
+     envoie l'evenement Purchase du pixel (une seule fois par commande). Si la commande ne se lit pas, la page EasyOrders revient. */
+  var THX_STATUS = { pending: 'En attente de confirmation', confirmed: 'Confirmée', canceled: 'Annulée', cancelled: 'Annulée', processing: 'En préparation', delivered: 'Livrée' };
+  function phoneFr(p) { var s = String(p || '').replace(/\D/g, ''); if (/^212\d{9}$/.test(s)) s = '0' + s.slice(3); return s.length === 10 ? s.replace(/(\d{2})(?=\d)/g, '$1 ') : String(p || ''); }
+  function thanksOrder() {
+    var id = new URLSearchParams(location.search).get('order_id') || '';
+    if (!/^[0-9a-f-]{36}$/i.test(id)) return Promise.resolve(null);
+    return fetch(API + 'orders/client/' + id).then(function (r) { return r.ok ? r.json() : null; }).catch(function () { return null; });
+  }
+  function vThanks(o) {
+    var n = o && o.short_id, tel = o ? phoneFr(o.phone) : '';
+    var wa = WA + '?text=' + encodeURIComponent('Bonjour ORVYA, à propos de ma commande' + (n ? ' n° ' + n : '') + ' : ');
+    var head = '<header class="thx__head"><img class="thx__logo" src="' + ASSETS + 'orvya-logo-gold-transparent-800.png" alt="ORVYA" width="120" height="40">' +
+      '<span class="thx__seal" aria-hidden="true">' + I.check + '</span>' +
+      '<p class="eyebrow">' + (n ? 'Commande n° ' + esc(n) : 'Commande reçue') + '</p>' +
+      '<h1 class="thx__title">Merci pour votre commande</h1>' +
+      '<p class="thx__lede">Nous l’avons bien reçue. Notre équipe vous contacte bientôt par téléphone ou WhatsApp pour la confirmer avant l’expédition.</p></header>';
+    if (!o) return '<section class="thx" aria-busy="true"><div class="wrap">' + head + '</div></section>';
+    var items = o.cart_items || [], cost = Number(o.cost) || items.reduce(function (s, i) { return s + i.price * i.quantity; }, 0);
+    var ship = Number(o.shipping_cost) || 0, total = Number(o.total_cost) || cost + ship;
+    var st = THX_STATUS[String(o.status || '').toLowerCase()];
+    var many = items.reduce(function (s, i) { return s + (Number(i.quantity) || 1); }, 0) > 1;
+    var steps = '<section class="thx__panel" data-rv="fade"><h2>Et maintenant ?</h2><ol class="thx__steps">' +
+      '<li><span class="thx__num">1</span><div><strong>Appel de confirmation</strong><p>Nous vous appelons' + (tel ? ' au <span class="thx__tel">' + esc(tel) + '</span>' : '') + ' pour confirmer votre commande et votre adresse. Gardez votre téléphone à portée de main.</p></div></li>' +
+      '<li><span class="thx__num">2</span><div><strong>Préparation et expédition</strong><p>Une fois votre commande confirmée, ' + (many ? 'vos bijoux sont préparés avec soin puis confiés' : 'votre bijou est préparé avec soin puis confié') + ' au livreur.</p></div></li>' +
+      '<li><span class="thx__num">3</span><div><strong>Livraison et paiement</strong><p>Livraison offerte en 2 à 4 jours ouvrés. Ouvrez votre colis, vérifiez ' + (many ? 'vos bijoux' : 'votre bijou') + ', puis payez le livreur en espèces.</p></div></li>' +
+      '</ol><p class="thx__help">Une erreur dans votre numéro ou votre adresse ? <a class="link-u" href="' + wa + '" target="_blank" rel="noopener">Écrivez-nous sur WhatsApp</a></p></section>';
+    var lines = items.map(function (i) {
+      var p = i.product || {}, name = p.name || '';
+      return '<div class="thx__line">' + (p.thumb ? img(p.thumb, name, '', 'width="56" height="70"') : '<span></span>') +
+        '<div><div class="thx__name">' + esc(name) + '</div><div class="thx__qty">Quantité : ' + esc(i.quantity) + '</div></div><div class="thx__price">' + fmt(i.price * i.quantity) + '</div></div>';
+    }).join('');
+    var card = '<section class="thx__card" data-rv="fade"><div class="thx__card-head"><h2>Récapitulatif</h2>' + (st ? '<span class="thx__status">' + st + '</span>' : '') + '</div>' + lines +
+      '<div class="thx__rows"><div><span>Sous-total</span><span>' + fmt(cost) + '</span></div>' +
+      '<div><span>Livraison</span><span' + (ship ? '>' + fmt(ship) : ' class="thx__free">Offerte') + '</span></div>' +
+      '<div class="thx__total"><span>Total</span><span>' + fmt(total) + '</span></div>' +
+      '<div><span>Paiement</span><span>' + (o.payment_method === 'cod' ? 'En espèces à la livraison' : esc(o.payment_method || '')) + '</span></div></div>' +
+      '<div class="thx__ship"><h3>Livraison à</h3><p>' + esc(o.full_name || '') + '<br>' + esc(tel) + '<br>' + esc(o.address || '') + (o.government ? '<br>' + esc(o.government) : '') + '</p></div></section>';
+    return '<section class="thx"><div class="wrap">' + head + '<div class="thx__grid">' + steps + card + '</div>' +
+      '<div class="thx__cta"><a class="btn btn--light" href="/collections/bijoux">Continuer mes achats</a><a class="link-u" href="' + wa + '" target="_blank" rel="noopener">Une question ? Écrivez-nous</a></div></div></section>';
+  }
+  /* commande illisible (lien incomplet, API indisponible) : la page EasyOrders d'origine reprend sa place */
+  function thanksFallback() { root.classList.remove('ov-view', 'ov-v-thanks', 'ov-page-ready'); if (page) page.hidden = true; }
+
   /* ---------- 10. Suite de page, pied de page, menu, recherche, tiroirs, voile, messages (hors de l'application) ---------- */
   function linkList(items) { return '<ul>' + items.map(function (h) { return '<li><a href="' + h[1] + '"' + (/^https:/.test(h[1]) ? ' target="_blank" rel="noopener"' : '') + '>' + h[0] + '</a></li>'; }).join('') + '</ul>'; }
   function mountEnd() {
@@ -581,6 +629,13 @@
      ses statistiques et le pixel restent exacts. L'affichage suit tout de suite, comme dans la maquette. */
   var cart = null, cartP = null, queue = Promise.resolve(), pending = {};
   function hydrated() { return w.orvyaHydrated ? w.orvyaHydrated() : !!$('.ab-footer-grid'); }
+  /* Vers la page de commande SANS recharger (2026-11-08) : l'application EasyOrders garde le panier en memoire et envoie
+     InitiateCheckout avec le montant et les produits. Un rechargement complet de /checkout l'envoyait avec value 0 et sans produit. */
+  function goCheckout() {
+    var r = w.next && w.next.router;
+    if (r && r.push && hydrated()) { closeAll(true); r.push('/checkout'); }
+    else location.href = '/checkout';
+  }
   /* l'application est en pause sur l'accueil (vitesse) : on la demarre si besoin */
   function whenApp(fn) {
     if (hydrated()) return fn();
@@ -765,7 +820,7 @@
     if (!t) return;
     var A = function (k) { return t.getAttribute(k); };
     if (t.tagName === 'A' && openEl && A('href') && !/^https?:/.test(A('href'))) closeAll(true);
-    if (t.hasAttribute('data-checkout')) { if (Object.keys(pending).length) { e.preventDefault(); flushRemovals().then(function () { location.href = '/checkout'; }); } return; }
+    if (t.hasAttribute('data-checkout')) { e.preventDefault(); (Object.keys(pending).length ? flushRemovals() : Promise.resolve()).then(goCheckout); return; }
     if (A('data-fav')) { e.preventDefault(); toggleFav(A('data-fav'), t); return; }
     if (A('data-open')) { e.preventDefault(); open(A('data-open')); return; }
     if (t.hasAttribute('data-close')) { e.preventDefault(); closeAll(); return; }
@@ -803,7 +858,7 @@
         /* sans bouton d'achat : ajout au panier puis page de commande (jamais une commande au panier vide) */
         var add = themePdpBtn('add');
         if (!add) { t.classList.remove('is-loading'); location.reload(); return; }
-        add.click(); closeThemeCart().then(refreshCart).then(function () { location.href = '/checkout'; });
+        add.click(); closeThemeCart().then(refreshCart).then(goCheckout);
       });
       return;
     }
@@ -960,7 +1015,7 @@
   });
 
   /* ---------- 18. Routeur : quelle page de la maquette pour quelle adresse de la boutique ---------- */
-  var page = null, curView = '', curKey = '', VIEWS = ['collection', 'product', 'search', 'favorites', 'info', 'cart', '404'];
+  var page = null, curView = '', curKey = '', VIEWS = ['collection', 'product', 'search', 'favorites', 'info', 'cart', '404', 'thanks'];
   function viewOf() {
     var p = path();
     if (p === '/') return 'home';
@@ -985,6 +1040,7 @@
     else if (v === 'cart') { mountPage(vCart()); refreshCart(); }
     else if (v === 'info') { var h = vInfo(seg); if (h) mountPage(h); else { curView = '404'; root.classList.add('ov-v-404'); mountPage(vNotFound()); } }
     else if (v === '404') mountPage(vNotFound());
+    else if (v === 'thanks') { mountPage(vThanks(null)); thanksOrder().then(function (o) { if (curView !== v) return; if (o && o.id) { page.innerHTML = vThanks(o); afterRender(); } else thanksFallback(); }); }
     else if (v === 'product') {
       productOf(seg).then(function (pr) {
         if (curView !== v) return;
