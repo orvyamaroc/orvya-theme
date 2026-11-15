@@ -162,12 +162,14 @@ html.ov-co-ready #checkout-form button.checkout_buy_now::after{content:"\00a0· 
 .ov .thx__title{margin:0 0 14px;font:400 var(--t-h2)/1.08 var(--f-display);color:var(--ivoire)}
 .ov .thx__lede{margin:0;color:rgba(255,252,239,.8);font-size:var(--t-md);line-height:1.6}
 .ov .thx__grid{display:grid;gap:20px;max-width:1040px;margin:0 auto}
+/* 2026-11-15 : sans min-width:0, la colonne prenait la largeur du titre + pastille de statut (insecables) : page plus large que le telephone */
+.ov .thx__grid > *{min-width:0}
 @media (min-width:900px){.ov .thx__grid{grid-template-columns:1fr 1fr;gap:28px;align-items:start}}
 .ov .thx h2{margin:0;font:400 var(--t-h3)/1.2 var(--f-display)}
 .ov .thx__panel{padding:clamp(22px,3vw,32px);border:1px solid rgba(217,188,134,.24);border-radius:var(--rayon)}
 .ov .thx__panel h2{margin-bottom:22px;color:var(--ivoire)}
 .ov .thx__steps{display:grid;gap:22px;margin:0;padding:0;list-style:none}
-.ov .thx__steps li{display:grid;grid-template-columns:34px 1fr;gap:14px}
+.ov .thx__steps li{display:grid;grid-template-columns:34px minmax(0,1fr);gap:14px}
 .ov .thx__num{display:grid;place-items:center;width:34px;height:34px;border:1px solid var(--or-clair);border-radius:50%;color:var(--or-clair);font:500 13px/1 var(--f-texte)}
 .ov .thx__steps strong{display:block;margin:6px 0 4px;font-weight:500;color:var(--ivoire)}
 .ov .thx__steps p{margin:0;color:rgba(255,252,239,.74);font-size:var(--t-sm);line-height:1.6}
@@ -176,7 +178,7 @@ html.ov-co-ready #checkout-form button.checkout_buy_now::after{content:"\00a0· 
 .ov .thx__help a,.ov .thx__cta .link-u{color:var(--or-clair)}
 .ov .thx__help a:hover,.ov .thx__cta .link-u:hover{color:var(--ivoire)}
 .ov .thx__card{padding:clamp(22px,3vw,32px);background:var(--ivoire);color:var(--encre);border-radius:var(--rayon);box-shadow:var(--ombre-2)}
-.ov .thx__card-head{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:8px}
+.ov .thx__card-head{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:8px 12px;margin-bottom:8px}
 .ov .thx__status{padding:4px 10px;border:1px solid var(--ligne-forte);border-radius:999px;color:var(--taupe);font-size:11.5px;letter-spacing:.08em;text-transform:uppercase;white-space:nowrap}
 .ov .thx__line{display:grid;grid-template-columns:56px 1fr auto;gap:14px;align-items:center;padding:14px 0;border-bottom:1px solid var(--ligne)}
 .ov .thx__line img{width:56px;height:70px;object-fit:cover;border-radius:var(--rayon);background:var(--sable)}

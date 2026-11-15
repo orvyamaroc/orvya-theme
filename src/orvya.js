@@ -489,11 +489,11 @@
     var ship = Number(o.shipping_cost) || 0, total = Number(o.total_cost) || cost + ship;
     var st = THX_STATUS[String(o.status || '').toLowerCase()];
     var many = items.reduce(function (s, i) { return s + (Number(i.quantity) || 1); }, 0) > 1;
-    var steps = '<section class="thx__panel" data-rv="fade"><h2>Et maintenant ?</h2><ol class="thx__steps">' +
+    var steps = '<section class="thx__panel" data-rv="fade"><h2>Et maintenant&nbsp;?</h2><ol class="thx__steps">' +
       '<li><span class="thx__num">1</span><div><strong>Appel de confirmation</strong><p>Nous vous appelons' + (tel ? ' au <span class="thx__tel">' + esc(tel) + '</span>' : '') + ' pour confirmer votre commande et votre adresse. Gardez votre téléphone à portée de main.</p></div></li>' +
       '<li><span class="thx__num">2</span><div><strong>Préparation et expédition</strong><p>Une fois votre commande confirmée, ' + (many ? 'vos bijoux sont préparés avec soin puis confiés' : 'votre bijou est préparé avec soin puis confié') + ' au livreur.</p></div></li>' +
       '<li><span class="thx__num">3</span><div><strong>Livraison et paiement</strong><p>Livraison offerte en 2 à 4 jours ouvrés. Ouvrez votre colis, vérifiez ' + (many ? 'vos bijoux' : 'votre bijou') + ', puis payez le livreur en espèces.</p></div></li>' +
-      '</ol><p class="thx__help">Une erreur dans votre numéro ou votre adresse ? <a class="link-u" href="' + wa + '" target="_blank" rel="noopener">Écrivez-nous sur WhatsApp</a></p></section>';
+      '</ol><p class="thx__help">Une erreur dans votre numéro ou votre adresse&nbsp;? <a class="link-u" href="' + wa + '" target="_blank" rel="noopener">Écrivez-nous sur WhatsApp</a></p></section>';
     var lines = items.map(function (i) {
       var p = i.product || {}, name = p.name || '';
       return '<div class="thx__line">' + (p.thumb ? img(p.thumb, name, '', 'width="56" height="70"') : '<span></span>') +
@@ -506,7 +506,7 @@
       '<div><span>Paiement</span><span>' + (o.payment_method === 'cod' ? 'En espèces à la livraison' : esc(o.payment_method || '')) + '</span></div></div>' +
       '<div class="thx__ship"><h3>Livraison à</h3><p>' + esc(o.full_name || '') + '<br>' + esc(tel) + '<br>' + esc(o.address || '') + (o.government ? '<br>' + esc(o.government) : '') + '</p></div></section>';
     return '<section class="thx"><div class="wrap">' + head + '<div class="thx__grid">' + steps + card + '</div>' +
-      '<div class="thx__cta"><a class="btn btn--light" href="/collections/bijoux">Continuer mes achats</a><a class="link-u" href="' + wa + '" target="_blank" rel="noopener">Une question ? Écrivez-nous</a></div></div></section>';
+      '<div class="thx__cta"><a class="btn btn--light" href="/collections/bijoux">Continuer mes achats</a><a class="link-u" href="' + wa + '" target="_blank" rel="noopener">Une question&nbsp;? Écrivez-nous</a></div></div></section>';
   }
   /* commande illisible (lien incomplet, API indisponible) : la page EasyOrders d'origine reprend sa place */
   function thanksFallback() { root.classList.remove('ov-view', 'ov-v-thanks', 'ov-page-ready'); if (page) page.hidden = true; }
