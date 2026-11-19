@@ -92,6 +92,25 @@
   }).observe(next, { childList: true, subtree: true });
   root.classList.add('ov-on');
   var header = $('#ov-header', top);
+  /* En-tete toujours visible (2026-11-19). « sticky » seul le laisse partir en bas de page : il est colle a l'interieur de
+     #__next et le pied de page est en dehors. Des que le bandeau est passe, il devient donc « fixed » et une cale de la meme
+     hauteur garde sa place dans la page (rien ne saute). La cale, posee juste avant l'en-tete, marque toujours sa place
+     d'origine (un en-tete « sticky » colle renvoie sa position collee). Elle est dans notre bloc (#ov-top), jamais dans
+     l'arbre React. */
+  var hdrSp = d.createElement('div');
+  hdrSp.className = 'ov-hdr-sp'; hdrSp.setAttribute('aria-hidden', 'true');
+  header.parentNode.insertBefore(hdrSp, header);
+  var hdrFixed = false, hdrTick = false;
+  function hdrPin() {
+    hdrTick = false;
+    var fix = hdrSp.offsetParent !== null && scrollY > hdrSp.getBoundingClientRect().top + scrollY;
+    hdrSp.style.height = fix ? header.offsetHeight + 'px' : '0px';
+    if (fix !== hdrFixed) { hdrFixed = fix; root.classList.toggle('ov-hdr-fix', fix); }
+  }
+  function hdrQueue() { if (!hdrTick) { hdrTick = true; requestAnimationFrame(hdrPin); } }
+  addEventListener('scroll', hdrQueue, { passive: true });
+  addEventListener('resize', hdrQueue);
+  hdrQueue();
 
   /* ---------- 4. Gabarits (maquette) ---------- */
   function trustItems() {
@@ -917,13 +936,10 @@
     });
     ticking = false;
   }
-  var lastY = 0;
   addEventListener('scroll', function () {
     var y = scrollY;
+    // en-tete toujours visible en haut de l'ecran (demande de la proprietaire, 2026-11-19) : il ne se cache plus a la descente
     header.classList.toggle('is-scrolled', y > 8);
-    if (y > 260 && y > lastY + 4 && !openEl) { header.classList.add('is-hidden'); root.classList.add('ov-header-hidden'); }
-    else if (y < lastY - 4 || y < 260) { header.classList.remove('is-hidden'); root.classList.remove('ov-header-hidden'); }
-    lastY = y;
     if (!ticking && pEls.length) { ticking = true; requestAnimationFrame(onScrollFrame); }
     if (stickyBox && !stickyTick) { stickyTick = true; requestAnimationFrame(function () { stickyTick = false; updateSticky(); }); }
   }, { passive: true });
