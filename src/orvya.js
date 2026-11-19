@@ -29,7 +29,6 @@
     'boucles-oreilles': 'Créoles et boucles serties pour éclairer le visage.'
   };
   /* point du bijou sur chaque photo (vue « Détail » de la fiche produit), repris de la maquette */
-  var CROP = { 'bague-solitaire-doree': ['50%', '58%'], 'collier-pendentif-zircon': ['42%', '74%'], 'creoles-dorees-zircons': ['57%', '61%'], 'bracelet-chaine-perlee-doree': ['56%', '60%'] };
   var FAQ = [
     ['Quels sont les délais de livraison ?', 'Après confirmation de votre commande par téléphone, votre bijou vous parvient en 2 à 4 jours ouvrés selon votre ville. La livraison est offerte partout au Maroc.'],
     ['Comment se fait le paiement ?', 'En espèces, à la livraison. Aucun paiement à l’avance.'],
@@ -339,9 +338,12 @@
     return data().then(function (list) { var b = bySlug(list, slug); return b ? build({ id: b.id, name: b.name, slug: b.slug, price: b.price, thumb: b.img, description: b.descHtml }, b) : null; });
   }
   function vProduct(p) {
-    var on = favOn(p.id), cr = CROP[p.slug] || ['50%', '55%'], earrings = p.catSlug === 'boucles-oreilles';
-    var slides = [{ src: p.img, label: '', alt: p.name }, { src: p.img, label: 'Détail', alt: 'Détail : ' + p.name, crop: true }]
-      .concat(p.extra.map(function (x) { return { src: x, label: 'Autre vue', alt: p.name + ', autre vue' }; }));
+    /* Photos : uniquement celles ajoutees dans EasyOrders (photo principale puis les autres, dans leur ordre), montrees
+       entieres, sans recadrage ni agrandissement automatique (2026-11-19, demande de la proprietaire : plus de faux
+       « Détail » = photo principale agrandie 2,1 fois). */
+    var on = favOn(p.id), earrings = p.catSlug === 'boucles-oreilles';
+    var slides = [{ src: p.img, alt: p.name }].concat(p.extra.map(function (x, i) { return { src: x, alt: p.name + ', photo ' + (i + 2) }; }));
+    var many = slides.length > 1;
     var retours = earrings
       ? '<p>Échange ou retour sous 7 jours pour les bijoux non portés. <strong>Pour des raisons d’hygiène, les boucles d’oreilles ne sont ni reprises ni échangées, sauf défaut de fabrication.</strong></p>'
       : '<p>Échange ou retour possible sous 7 jours après réception, à condition que le bijou soit non porté, non endommagé et dans son emballage d’origine.</p>';
@@ -349,12 +351,12 @@
     return '<div class="wrap">' + crumbs([['Accueil', '/']].concat(cat, [[esc(p.name)]])) +
       '<div class="pdp" data-fly-root><div class="gallery" data-gallery><div class="g-track" tabindex="0" aria-label="Photos du produit">' +
       slides.map(function (s, i) {
-        return '<div class="g-slide' + (s.crop ? ' crop' : '') + '" style="--cx:' + cr[0] + ';--cy:' + cr[1] + '" data-zoom><img src="' + s.src + '" alt="' + esc(s.alt) + '" class="fade-img' + (i === 0 ? ' pdp-main' : '') + '" ' +
-          (i === 0 ? 'fetchpriority="high"' : 'loading="lazy"') + ' decoding="async">' + (s.label ? '<span class="g-tag">' + s.label + '</span>' : '') + '</div>';
+        return '<div class="g-slide" data-zoom><img src="' + s.src + '" alt="' + esc(s.alt) + '" class="fade-img' + (i === 0 ? ' pdp-main' : '') + '" ' +
+          (i === 0 ? 'fetchpriority="high"' : 'loading="lazy"') + ' decoding="async"></div>';
       }).join('') + '</div>' +
       '<button class="fav g-fav' + (on ? ' is-on' : '') + '" data-fav="' + p.id + '" aria-pressed="' + on + '" aria-label="' + (on ? 'Retirer des' : 'Ajouter aux') + ' favoris">' + I.heart + '</button>' +
-      '<div class="g-dots" role="tablist" aria-label="Choisir une photo">' + slides.map(function (s, i) { return '<button role="tab" aria-label="Photo ' + (i + 1) + '" class="' + (i === 0 ? 'is-on' : '') + '" data-goto="' + i + '"></button>'; }).join('') + '</div>' +
-      '<div class="g-thumbs">' + slides.map(function (s, i) { return '<button class="' + (i === 0 ? 'is-on' : '') + (s.crop ? ' crop' : '') + '" style="--cx:' + cr[0] + ';--cy:' + cr[1] + '" data-goto="' + i + '" aria-label="Voir la photo ' + (i + 1) + '"><img src="' + s.src + '" alt="" loading="lazy"></button>'; }).join('') + '</div></div>' +
+      (many ? '<div class="g-dots" role="tablist" aria-label="Choisir une photo">' + slides.map(function (s, i) { return '<button role="tab" aria-label="Photo ' + (i + 1) + '" class="' + (i === 0 ? 'is-on' : '') + '" data-goto="' + i + '"></button>'; }).join('') + '</div>' +
+      '<div class="g-thumbs">' + slides.map(function (s, i) { return '<button class="' + (i === 0 ? 'is-on' : '') + '" data-goto="' + i + '" aria-label="Voir la photo ' + (i + 1) + '"><img src="' + s.src + '" alt="" loading="lazy"></button>'; }).join('') + '</div>' : '') + '</div>' +
       '<div class="pdp__info"><p class="eyebrow">' + esc(p.cat) + '</p><h1 class="pdp__title">' + esc(p.name) + '</h1>' +
       '<div class="pdp__price"><span class="price">' + fmt(p.price) + '</span><small>Livraison offerte</small></div>' +
       '<p class="pdp__desc">' + esc(p.desc) + '</p><div class="pdp__meta"><span>' + I.drop + ' Résiste à l’eau</span><span>' + I.shield + ' Garantie 2 ans</span></div>' +
