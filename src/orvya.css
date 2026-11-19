@@ -282,3 +282,20 @@ html.ov-co-ready #checkout-form button.checkout_buy_now::after{content:"\00a0· 
 html.ov-is-checkout #checkout-form label.check.ov-cgv,.ov label.check.ov-cgv{display:flex!important;flex-direction:row;align-items:flex-start;gap:12px;margin:var(--s-5) 0 0!important;font:400 14px/1.55 var(--f-texte)!important;letter-spacing:0!important}
 .ov label.check.ov-cgv input{width:20px!important;height:20px!important;min-width:20px;padding:0!important}
 .ov label.check.ov-cgv>span{flex:1;min-width:0}
+
+/* Cartes produit : ajout rapide = petite pastille ronde (sac) en bas a droite de la photo, sur tous les ecrans.
+   Le cadre .card__fig contient photo + coeur + sac : le sac reste sur la photo et ne couvre plus le nom ni le prix. */
+.ov .card__fig{position:relative}
+.ov .card__quick{left:auto;right:10px;bottom:10px;width:40px;height:40px;min-height:40px;padding:0;gap:0;border-radius:50%;opacity:1;transform:none;background:rgba(255,252,239,.88);color:var(--encre);box-shadow:0 2px 10px rgba(29,29,27,.12)}
+.ov .card__quick span{display:none}
+.ov .card__quick svg{width:18px;height:18px}
+.ov .card__quick:active,.ov .fav:active{transform:scale(.88)}
+.ov .card__quick.is-done{background:var(--ok);color:#fff}
+@media (hover:hover) and (pointer:fine){.ov .card__quick:hover{background:var(--bordeaux);color:var(--ivoire)}}
+/* telephones : pastilles un peu plus petites (photo d'environ 170 px de large), zone de toucher gardee a 44 px */
+@media (max-width:599px){
+  .ov .card .fav{top:8px;right:8px;width:36px;height:36px}
+  .ov .card__quick{right:8px;bottom:8px;width:36px;height:36px;min-height:36px}
+  .ov .card .fav svg,.ov .card__quick svg{width:17px;height:17px}
+  .ov .card .fav::before,.ov .card__quick::before{content:"";position:absolute;inset:-4px}
+}
