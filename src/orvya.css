@@ -202,3 +202,16 @@ html.ov-co-ready #checkout-form button.checkout_buy_now::after{content:"\00a0· 
 .ov .thx__ship p{margin:0;color:var(--taupe);font-size:var(--t-sm);line-height:1.7;overflow-wrap:anywhere}
 .ov .thx__cta{display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:14px 28px;margin-top:clamp(32px,5vw,52px)}
 @media (max-width:520px){.ov .thx__cta .btn{width:100%}.ov .thx__line{grid-template-columns:48px 1fr auto}.ov .thx__line img{width:48px;height:60px}}
+
+/* Collection, en-tete (2026-11-19) : sur ordinateur, l'arc etroit (280 px) laissait un grand vide au milieu et le texte
+   colle en bas. Texte + onglets forment une colonne centree verticalement ; la photo devient un arc large (comme le hero
+   de l'accueil). Telephone : memes espacements qu'avant (onglets a 48 px du texte, 24 px avant la barre de tri). */
+.ov .coll-hero>div{min-width:0}
+.ov .coll-hero{padding-bottom:var(--s-5)}
+.ov .coll-hero .cat-tabs{margin:var(--s-7) 0 0}
+@media (min-width:900px){
+  .ov .coll-hero{grid-template-columns:minmax(0,1fr) minmax(0,.85fr);gap:var(--s-8);align-items:center;padding-block:var(--s-5) var(--s-7)}
+  .ov .coll-hero .arch{width:100%;max-width:520px;justify-self:end;aspect-ratio:5/4;border-radius:50% 50% 0 0/62.5% 62.5% 0 0}
+  .ov .coll-hero .lead{max-width:40ch}
+  .ov .coll-hero .cat-tabs{flex-wrap:wrap;overflow:visible;margin-top:var(--s-6)}
+}

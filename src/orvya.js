@@ -248,10 +248,11 @@
   function vCollection(slug) {
     var c = CATS[slug];
     return '<div class="wrap"><div class="coll-hero"><div>' + crumbs([['Accueil', '/'], [c.name]]) +
-      '<h1 class="split" data-rv>' + split(esc(c.name)) + '</h1><p class="lead" style="margin-top:16px" data-rv>' + INTRO[slug] + '</p></div>' +
-      '<div class="arch" data-rv="arch">' + img(c.img, c.name) + '</div></div>' +
+      '<h1 class="split" data-rv>' + split(esc(c.name)) + '</h1><p class="lead" style="margin-top:16px" data-rv>' + INTRO[slug] + '</p>' +
+      /* 2026-11-19 : onglets dans la colonne du texte (ordinateur : texte + onglets centres a cote de l'arc) */
       '<div class="cat-tabs" role="navigation" aria-label="Catégories"><a class="chip' + (slug === 'bijoux' ? ' is-on' : '') + '" href="/collections/bijoux">Tout</a>' +
-      ORDER.map(function (k) { return '<a class="chip' + (slug === k ? ' is-on' : '') + '" href="/collections/' + k + '">' + CATS[k].name + '</a>'; }).join('') + '</div>' +
+      ORDER.map(function (k) { return '<a class="chip' + (slug === k ? ' is-on' : '') + '" href="/collections/' + k + '">' + CATS[k].name + '</a>'; }).join('') + '</div></div>' +
+      '<div class="arch" data-rv="arch">' + img(c.img, c.name) + '</div></div>' +
       toolbar(null) + '<div class="active-filters" id="ov-active">' + activeChips(slug) + '</div><div id="ov-grid" data-base="' + slug + '">' + gridHTML(null) + '</div><div id="ov-coll-note"></div></div>' +
       '<div style="height:96px"></div>';
   }
