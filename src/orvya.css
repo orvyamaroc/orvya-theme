@@ -22,8 +22,10 @@ html.ov-locked{overflow:hidden}
 .ov.ov-top > *,.ov.ov-end{flex-shrink:0}
 /* Fiche produit : seulement les photos ajoutees dans EasyOrders (orvya.js). 2026-11-19 (proprietaire) : la photo remplit
    toute la zone 4:5 (object-fit:cover de la maquette), plus de bandes sable autour comme en v1.1.9 (contain). */
-/* Bandeau d'annonce : meme fond que le pied de page (--bordeaux-900), demande du proprietaire 2026-11-19 */
-.ov .annonce{background:var(--bordeaux-900)}
+/* Bandeau d'annonce : meme bordeaux que le bouton « Découvrir la collection » (--bordeaux #630000), demande du proprietaire 2026-11-19 (v1.1.14) */
+.ov .annonce{background:var(--bordeaux)}
+/* Section « L'art d'offrir » : meme fond que le pied de page (--bordeaux-900 #2E0303), demande du proprietaire 2026-11-19 (v1.1.14) */
+.ov .gift{background:var(--bordeaux-900)}
 /* En-tete toujours visible : fixe en haut de l'ecran une fois le bandeau passe, sa cale garde sa place (orvya.js) */
 .ov .ov-hdr-sp{display:block;height:0}
 html.ov-hdr-fix .ov .header{position:fixed;top:0;left:0;right:0}

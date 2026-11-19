@@ -170,7 +170,7 @@
       rail(ORDER.map(function (k, i) { return catCard(k, i, null); }).join(''), 'Collections') + '</section>' +
     '<section class="section" style="padding-top:0"><div class="wrap section-head"><div><p class="eyebrow" data-rv>Pièces signature</p><h2 class="h2 split" data-rv>' + split('Nos essentiels [[dorés]]') + '</h2></div><a class="link-arrow" href="/collections/bijoux" data-rv="fade">Voir tout ' + I.arrow + '</a></div>' +
       '<div id="ov-signature">' + rail([0, 1, 2, 3].map(skelCard).join(''), 'Pièces signature') + '</div></section>' +
-    '<section class="section" style="padding-top:0"><div class="wrap edito"><div class="edito__media"><div class="arch" data-rv="arch">' + img(CATS.colliers.img, 'Collier doré posé sur un bol en céramique', '', 'data-parallax="0.05"') + '</div><span class="edito__ornament" aria-hidden="true"></span></div>' +
+    '<section class="section" style="padding-top:0"><div class="wrap edito"><div class="edito__media"><div class="arch" data-rv="arch">' + img(ASSETS + 'orvya-edito-quotidien-800x1000.webp', 'Bracelet jonc doré dans une coupelle en céramique sur une coiffeuse', '', 'data-parallax="0.05"') + '</div><span class="edito__ornament" aria-hidden="true"></span></div>' +
       '<div><p class="eyebrow" data-rv>Pourquoi ORVYA</p><h2 class="h2 split" data-rv>' + split('L’élégance [[au quotidien]]') + '</h2><span class="filet" data-rv="line"></span>' +
       '<p class="lead" style="margin-top:24px" data-rv>Des pièces raffinées, dessinées pour sublimer chaque tenue, du matin au soir.</p><ul class="engagements">' +
       '<li data-rv style="--i:0">' + I.drop + '<div><strong>Acier inoxydable 316L</strong><span>Finition dorée qui résiste à l’eau.</span></div></li>' +
@@ -181,7 +181,7 @@
       '<p class="eyebrow" data-rv>L’art d’offrir</p><h2 class="h2 split" data-rv>' + split('Un bijou se porte [[comme une signature]]') + '</h2>' +
       '<p class="lead" style="margin-top:24px" data-rv>Offrez-le à celle qui compte, ou offrez-vous ce luxe discret.</p>' +
       '<a class="btn btn--light" style="margin-top:32px" href="/collections/bijoux" data-rv="fade">Trouver le cadeau idéal</a></div>' +
-      '<div class="arch" data-rv="arch">' + img(CATS.bracelets.img, 'Bracelet doré autour d’un cylindre en travertin', '', 'data-parallax="0.05"') + '</div></div></section>' +
+      '<div class="arch" data-rv="arch">' + img(ASSETS + 'orvya-edito-cadeau-800x1000.webp', 'Bracelet doré dans un écrin bordeaux ouvert, ruban crème', '', 'data-parallax="0.05"') + '</div></div></section>' +
     '<section class="section"><div class="wrap" style="max-width:820px"><div class="center" style="margin-bottom:40px"><p class="eyebrow" data-rv>Vos questions</p><h2 class="h2 split" data-rv>' + split('Tout savoir avant [[de commander]]') + '</h2><span class="filet" data-rv="line"></span></div>' +
       '<div data-rv>' + FAQ.slice(0, 5).map(function (q) { return acc(q[0], '<p>' + q[1] + '</p>'); }).join('') + '</div>' +
       '<p class="center" style="margin-top:32px"><a class="link-arrow" href="' + PAGES.faq + '">Toutes les questions ' + I.arrow + '</a></p></div></section>' +
@@ -442,7 +442,7 @@
       '<a class="contact-card" href="' + WA + '" target="_blank" rel="noopener">' + I.wa + '<div><strong>WhatsApp</strong><span>+212 6 56 12 77 78</span></div></a>' +
       '<a class="contact-card" href="https://www.instagram.com/orvya.ma/" target="_blank" rel="noopener">' + I.heart + '<div><strong>Instagram</strong><span>@orvya.ma</span></div></a>' +
       '<a class="contact-card" href="https://www.facebook.com/orvya.official" target="_blank" rel="noopener">' + I.phone + '<div><strong>Facebook</strong><span>orvya.official</span></div></a>' +
-      '<a class="contact-card" href="https://www.tiktok.com/@orvya.official" target="_blank" rel="noopener">' + I.star + '<div><strong>TikTok</strong><span>@orvya.official</span></div></a></div>' },
+      '<a class="contact-card" href="https://www.tiktok.com/@orvya.ma" target="_blank" rel="noopener">' + I.star + '<div><strong>TikTok</strong><span>@orvya.ma</span></div></a></div>' },
     faq: { t: 'Questions fréquentes', h: '<h1>Questions fréquentes</h1><p class="lead" style="margin-bottom:32px">Livraison, paiement, échanges, entretien : l’essentiel en un coup d’œil.</p>' + FAQ.map(function (q, i) { return acc(q[0], '<p>' + q[1] + '</p>', i === 0); }).join('') +
       '<p style="margin-top:32px">Vous ne trouvez pas votre réponse ? <a class="link-u" href="' + WA + '" target="_blank" rel="noopener">Écrivez-nous sur WhatsApp</a>.</p>' },
     livraison: { t: 'Livraison', h: '<h1>Livraison</h1><p class="lead">Livraison offerte partout au Maroc. Vous payez le livreur en espèces, à la réception.</p>' +
@@ -544,7 +544,7 @@
           '<p>Bijoux en acier inoxydable à finition dorée. Livraison offerte partout au Maroc, paiement à la livraison.</p><div class="socials">' +
           '<a href="https://www.instagram.com/orvya.ma/" target="_blank" rel="noopener" aria-label="Instagram">' + I.ig + '</a>' +
           '<a href="https://www.facebook.com/orvya.official" target="_blank" rel="noopener" aria-label="Facebook">' + I.fb + '</a>' +
-          '<a href="https://www.tiktok.com/@orvya.official" target="_blank" rel="noopener" aria-label="TikTok">' + I.tt + '</a>' +
+          '<a href="https://www.tiktok.com/@orvya.ma" target="_blank" rel="noopener" aria-label="TikTok">' + I.tt + '</a>' +
           '<a href="' + WA + '" target="_blank" rel="noopener" aria-label="WhatsApp">' + I.wa + '</a></div></div>' +
         '<div><h4>Boutique</h4>' + linkList([['Tous les bijoux', '/collections/bijoux']].concat(ORDER.map(function (k) { return [CATS[k].name, '/collections/' + k]; }))) + '</div>' +
         '<div><h4>Aide</h4>' + linkList([['Livraison', PAGES.livraison], ['Retours &amp; échanges', PAGES.retours], ['Garantie', PAGES.garantie], ['Questions fréquentes', PAGES.faq], ['Suivre ma commande', WA_TRACK]]) + '</div>' +
