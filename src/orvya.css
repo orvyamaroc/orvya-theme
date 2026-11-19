@@ -26,6 +26,8 @@ html.ov-locked{overflow:hidden}
 .ov .annonce{background:var(--bordeaux)}
 /* Section « L'art d'offrir » : meme fond que le pied de page (--bordeaux-900 #2E0303), demande du proprietaire 2026-11-19 (v1.1.14) */
 .ov .gift{background:var(--bordeaux-900)}
+/* Titres des blocs editoriaux : lignes equilibrees (pas de mot seul en 2e ligne, ex. « signature »), v1.1.15 */
+.ov .gift .h2,.ov .edito .h2{text-wrap:balance}
 /* En-tete toujours visible : fixe en haut de l'ecran une fois le bandeau passe, sa cale garde sa place (orvya.js) */
 .ov .ov-hdr-sp{display:block;height:0}
 html.ov-hdr-fix .ov .header{position:fixed;top:0;left:0;right:0}
