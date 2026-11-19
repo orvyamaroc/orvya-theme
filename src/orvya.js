@@ -170,7 +170,7 @@
       rail(ORDER.map(function (k, i) { return catCard(k, i, null); }).join(''), 'Collections') + '</section>' +
     '<section class="section" style="padding-top:0"><div class="wrap section-head"><div><p class="eyebrow" data-rv>Pièces signature</p><h2 class="h2 split" data-rv>' + split('Nos essentiels [[dorés]]') + '</h2></div><a class="link-arrow" href="/collections/bijoux" data-rv="fade">Voir tout ' + I.arrow + '</a></div>' +
       '<div id="ov-signature">' + rail([0, 1, 2, 3].map(skelCard).join(''), 'Pièces signature') + '</div></section>' +
-    '<section class="section" style="padding-top:0"><div class="wrap edito"><div class="edito__media"><div class="arch" data-rv="arch">' + img(CATS.colliers.img, 'Colliers dorés sur un drapé bordeaux', '', 'data-parallax="0.05"') + '</div><span class="edito__ornament" aria-hidden="true"></span></div>' +
+    '<section class="section" style="padding-top:0"><div class="wrap edito"><div class="edito__media"><div class="arch" data-rv="arch">' + img(CATS.colliers.img, 'Collier doré posé sur un bol en céramique', '', 'data-parallax="0.05"') + '</div><span class="edito__ornament" aria-hidden="true"></span></div>' +
       '<div><p class="eyebrow" data-rv>Pourquoi ORVYA</p><h2 class="h2 split" data-rv>' + split('L’élégance [[au quotidien]]') + '</h2><span class="filet" data-rv="line"></span>' +
       '<p class="lead" style="margin-top:24px" data-rv>Des pièces raffinées, dessinées pour sublimer chaque tenue, du matin au soir.</p><ul class="engagements">' +
       '<li data-rv style="--i:0">' + I.drop + '<div><strong>Acier inoxydable 316L</strong><span>Finition dorée qui résiste à l’eau.</span></div></li>' +
@@ -181,7 +181,7 @@
       '<p class="eyebrow" data-rv>L’art d’offrir</p><h2 class="h2 split" data-rv>' + split('Un bijou se porte [[comme une signature]]') + '</h2>' +
       '<p class="lead" style="margin-top:24px" data-rv>Offrez-le à celle qui compte, ou offrez-vous ce luxe discret.</p>' +
       '<a class="btn btn--light" style="margin-top:32px" href="/collections/bijoux" data-rv="fade">Trouver le cadeau idéal</a></div>' +
-      '<div class="arch" data-rv="arch">' + img(CATS.bracelets.img, 'Bracelets dorés sur un coussin noir', '', 'data-parallax="0.05"') + '</div></div></section>' +
+      '<div class="arch" data-rv="arch">' + img(CATS.bracelets.img, 'Bracelet doré porté au poignet', '', 'data-parallax="0.05"') + '</div></div></section>' +
     '<section class="section"><div class="wrap" style="max-width:820px"><div class="center" style="margin-bottom:40px"><p class="eyebrow" data-rv>Vos questions</p><h2 class="h2 split" data-rv>' + split('Tout savoir avant [[de commander]]') + '</h2><span class="filet" data-rv="line"></span></div>' +
       '<div data-rv>' + FAQ.slice(0, 5).map(function (q) { return acc(q[0], '<p>' + q[1] + '</p>'); }).join('') + '</div>' +
       '<p class="center" style="margin-top:32px"><a class="link-arrow" href="' + PAGES.faq + '">Toutes les questions ' + I.arrow + '</a></p></div></section>' +

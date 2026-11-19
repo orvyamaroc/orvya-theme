@@ -13,17 +13,17 @@ var OVS = (function () {
     WA: WA,
     WA_TRACK: WA + '?text=' + encodeURIComponent('Bonjour, je souhaite suivre ma commande.'),
     LOGO: CDN + '1791664966379343969.webp',
-    HERO: CDN + '1791667426966739316.webp',
-    /* meme photo en 768 px (assets/hero-768.webp, 23 Ko au lieu de 49) : les telephones la recoivent, les ecrans haute
-       definition et les ordinateurs gardent la grande. Adresse figee sur la version qui l'a publiee (fichier immuable). */
-    HERO_768: 'https://cdn.jsdelivr.net/gh/orvyamaroc/orvya-theme@v1.0.5/assets/hero-768.webp',
+    HERO: 'https://cdn.jsdelivr.net/gh/orvyamaroc/orvya-theme@v1.1.12/assets/orvya-hero-1536.webp',
+    /* 2026-11-19 : nouvelles photos (marketing/2026-11_visual-refresh), servies par jsDelivr depuis assets/ de la version
+       qui les a publiees (fichiers immuables). Hero carre 1536 px + copie 768 px pour les telephones. */
+    HERO_768: 'https://cdn.jsdelivr.net/gh/orvyamaroc/orvya-theme@v1.1.12/assets/orvya-hero-768.webp',
     HERO_SIZES: '(min-width: 900px) 55vw, 105vw',
     CATS: {
-      bijoux: { name: 'Tous les bijoux', img: CDN + '1791668681520009646.webp' },
-      bagues: { name: 'Bagues', img: CDN + '1791667646678676581.webp' },
-      colliers: { name: 'Colliers', img: CDN + '1791667697388840139.webp' },
-      bracelets: { name: 'Bracelets', img: CDN + '1791667736419850997.webp' },
-      'boucles-oreilles': { name: 'Boucles d’oreilles', img: CDN + '1791667773890855965.webp' }
+      bijoux: { name: 'Tous les bijoux', img: 'https://cdn.jsdelivr.net/gh/orvyamaroc/orvya-theme@v1.1.12/assets/orvya-categorie-bijoux-800x1000.webp' },
+      bagues: { name: 'Bagues', img: 'https://cdn.jsdelivr.net/gh/orvyamaroc/orvya-theme@v1.1.12/assets/orvya-categorie-bagues-800x1000.webp' },
+      colliers: { name: 'Colliers', img: 'https://cdn.jsdelivr.net/gh/orvyamaroc/orvya-theme@v1.1.12/assets/orvya-categorie-colliers-800x1000.webp' },
+      bracelets: { name: 'Bracelets', img: 'https://cdn.jsdelivr.net/gh/orvyamaroc/orvya-theme@v1.1.12/assets/orvya-categorie-bracelets-800x1000.webp' },
+      'boucles-oreilles': { name: 'Boucles d’oreilles', img: 'https://cdn.jsdelivr.net/gh/orvyamaroc/orvya-theme@v1.1.12/assets/orvya-categorie-boucles-oreilles-800x1000.webp' }
     },
     ORDER: ['bagues', 'colliers', 'bracelets', 'boucles-oreilles'],
     PAGES: { livraison: '/pages/shipping-policy', retours: '/pages/refund-policy', garantie: '/pages/garantie', confidentialite: '/pages/privacy-policy', conditions: '/pages/terms-and-conditions', faq: '/pages/faq', contact: '/pages/contact' },
@@ -98,7 +98,7 @@ var OVS = (function () {
       '<h1 class="display hero-in" style="--d:1">L’éclat qui<br><em>vous ressemble</em></h1>' +
       '<p class="lead hero-in" style="--d:2">Des pièces fines, pensées pour sublimer chaque instant, du matin au soir.</p>' +
       '<div class="hero__cta hero-in" style="--d:3"><a class="btn" href="/collections/bijoux">Découvrir la collection</a><a class="link-u" href="' + P.livraison + '">Livraison offerte · Paiement à la livraison</a></div></div>' +
-      '<div class="hero__media hero-in-media"><div class="arch"><img src="' + S.HERO + '" srcset="' + S.HERO_768 + ' 768w, ' + S.HERO + ' 1536w" sizes="' + S.HERO_SIZES + '" alt="Femme portant un collier et des bagues dorés sur une robe bordeaux" fetchpriority="high" decoding="async" data-parallax="0.06"></div></div></div></section>';
+      '<div class="hero__media hero-in-media"><div class="arch"><img src="' + S.HERO + '" srcset="' + S.HERO_768 + ' 768w, ' + S.HERO + ' 1536w" sizes="' + S.HERO_SIZES + '" alt="Femme en robe bordeaux portant un collier, une bague et un bracelet dorés" fetchpriority="high" decoding="async" data-parallax="0.06"></div></div></div></section>';
   };
 
   /* Prechargement de la photo du hero, place tout en haut du code du head (avant les feuilles de style) : la photo part
