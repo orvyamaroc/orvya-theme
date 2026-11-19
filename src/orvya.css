@@ -13,7 +13,9 @@ html.ov-out #__next .ov-top,html.ov-out #__next #ov-hero-tpl{display:none!import
 /* blocs poses a cote des champs EasyOrders (page de commande) : sans boite, leurs enfants prennent place dans la grille */
 .ov-dc{display:contents!important}
 html.ov-on,html.ov-on body{background:var(--ivoire)}
-html.ov-locked,html.ov-locked body{overflow:hidden}
+/* Tiroir ouvert : la page ne defile plus. Seul <html> est bloque : le theme donne a body une hauteur fixe (un ecran),
+   l'y bloquer aussi reduisait la page a un ecran et la ramenait en haut a chaque ouverture du menu (corrige 2026-11-19). */
+html.ov-locked{overflow:hidden}
 /* « main » de la maquette (regle non reprise par build.js) */
 .ov main.ov-page{display:block;min-height:60vh}
 /* le theme met body (et #__next) en colonne flexible de hauteur fixe : nos blocs ne doivent jamais y retrecir */
