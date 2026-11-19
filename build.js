@@ -73,6 +73,9 @@ function scopeMockupCss(css) {
   const bundle = '(function(){\n' + shellSrc + '\n' + fs.readFileSync(path.join(__dirname, 'src', 'orvya.js'), 'utf8') + '\n})();';
   const js = await minify(bundle, { compress: { passes: 2 }, mangle: true, format: { comments: false } });
   fs.writeFileSync(path.join(__dirname, 'dist', 'orvya.min.js'), js.code);
+  // pages d'aide et pages juridiques : fichier a part, charge seulement sur /pages/* (2026-11-19)
+  const legal = await minify(fs.readFileSync(path.join(__dirname, 'src', 'legal.js'), 'utf8'), { compress: { passes: 2 }, mangle: true, format: { comments: false } });
+  fs.writeFileSync(path.join(__dirname, 'dist', 'orvya-legal.min.js'), legal.code);
   // haut de page statique pour le code du head EasyOrders (bloc ORVYA-SHELL, recopie par head-code/build_headcode.js)
   delete require.cache[require.resolve('./src/shell.js')];
   const shell = require('./src/shell.js').staticShell();

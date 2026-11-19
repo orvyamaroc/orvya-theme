@@ -26,7 +26,7 @@ var OVS = (function () {
       'boucles-oreilles': { name: 'Boucles d’oreilles', img: 'https://cdn.jsdelivr.net/gh/orvyamaroc/orvya-theme@v1.1.13/assets/orvya-categorie-boucles-oreilles-still-800x1000.webp' }
     },
     ORDER: ['bagues', 'colliers', 'bracelets', 'boucles-oreilles'],
-    PAGES: { livraison: '/pages/shipping-policy', retours: '/pages/refund-policy', garantie: '/pages/garantie', confidentialite: '/pages/privacy-policy', conditions: '/pages/terms-and-conditions', faq: '/pages/faq', contact: '/pages/contact' },
+    PAGES: { livraison: '/pages/shipping-policy', retours: '/pages/refund-policy', garantie: '/pages/garantie', confidentialite: '/pages/privacy-policy', conditions: '/pages/terms-and-conditions', faq: '/pages/faq', contact: '/pages/contact', mentions: '/pages/mentions-legales', cookies: '/pages/cookies' },
     I: {
       arrow: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M5 12h14M13 6l6 6-6 6"/></svg>',
       left: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M15 6l-6 6 6 6"/></svg>',

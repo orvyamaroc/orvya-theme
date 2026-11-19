@@ -34,7 +34,7 @@
     ['Comment se fait le paiement ?', 'En espèces, à la livraison. Aucun paiement à l’avance.'],
     ['Puis-je ouvrir le colis avant de payer ?', 'Bien sûr. Ouvrez votre colis et découvrez votre bijou avant de régler.'],
     ['Comment entretenir mes bijoux ?', 'Rangez-les à l’abri de l’humidité et évitez le contact direct avec le parfum et les crèmes pour préserver leur éclat. Une question ? Écrivez-nous sur WhatsApp.'],
-    ['Puis-je échanger ou retourner un bijou ?', 'Oui, sous 7 jours après réception, si le bijou est non porté, non endommagé et dans son emballage d’origine. Pour des raisons d’hygiène, les boucles d’oreilles ne sont ni reprises ni échangées, sauf défaut de fabrication.'],
+    ['Puis-je échanger ou retourner un bijou ?', 'Oui, sous 7 jours après réception, si le bijou est non porté, non endommagé et dans son emballage d’origine. Les boucles d’oreilles sont reprises si elles n’ont pas été portées et si leur protection d’hygiène est intacte.'],
     ['Mes bijoux sont-ils garantis ?', 'Oui, 2 ans. Si la finition dorée se dégrade dans des conditions d’utilisation normales, nous échangeons votre bijou gratuitement.']
   ];
   var PRICE_LABEL = { lt150: 'Moins de 150 MAD', '150-170': '150 à 170 MAD', gt170: 'Plus de 170 MAD' };
@@ -341,7 +341,7 @@
     var slides = [{ src: p.img, alt: p.name }].concat(p.extra.map(function (x, i) { return { src: x, alt: p.name + ', photo ' + (i + 2) }; }));
     var many = slides.length > 1;
     var retours = earrings
-      ? '<p>Échange ou retour sous 7 jours pour les bijoux non portés. <strong>Pour des raisons d’hygiène, les boucles d’oreilles ne sont ni reprises ni échangées, sauf défaut de fabrication.</strong></p>'
+      ? '<p>Échange ou retour sous 7 jours après réception. Les boucles d’oreilles sont reprises si elles n’ont pas été portées et si leur protection d’hygiène est intacte.</p>'
       : '<p>Échange ou retour possible sous 7 jours après réception, à condition que le bijou soit non porté, non endommagé et dans son emballage d’origine.</p>';
     var cat = p.catSlug && CATS[p.catSlug] ? [[CATS[p.catSlug].name, '/collections/' + p.catSlug]] : [];
     return '<div class="wrap">' + crumbs([['Accueil', '/']].concat(cat, [[esc(p.name)]])) +
@@ -440,50 +440,43 @@
     if (!cart || !cart.length) return '<div style="grid-column:1/-1">' + emptyCart() + '</div>';
     return '<div>' + cart.map(lineHTML).join('') + '</div><aside class="summary"><h2>Récapitulatif</h2>' + summaryRows() + '<a class="btn btn--full" style="margin-top:24px" href="/checkout" data-checkout>Passer la commande</a>' + miniAssure() + '</aside>';
   }
-  var INFO_SLUG = { 'shipping-policy': 'livraison', 'refund-policy': 'retours', garantie: 'garantie', 'privacy-policy': 'confidentialite', 'terms-and-conditions': 'conditions', faq: 'faq', contact: 'contact' };
-  var INFO = {
-    contact: { t: 'Nous contacter', h: '<h1>Nous contacter</h1><p class="lead">Une question sur un bijou, une commande ou un échange ? Nous répondons sur WhatsApp.</p><div class="contact-cards">' +
-      '<a class="contact-card" href="' + WA + '" target="_blank" rel="noopener">' + I.wa + '<div><strong>WhatsApp</strong><span>+212 6 56 12 77 78</span></div></a>' +
-      '<a class="contact-card" href="https://www.instagram.com/orvya.ma/" target="_blank" rel="noopener">' + I.heart + '<div><strong>Instagram</strong><span>@orvya.ma</span></div></a>' +
-      '<a class="contact-card" href="https://www.facebook.com/orvya.official" target="_blank" rel="noopener">' + I.phone + '<div><strong>Facebook</strong><span>orvya.official</span></div></a>' +
-      '<a class="contact-card" href="https://www.tiktok.com/@orvya.ma" target="_blank" rel="noopener">' + I.star + '<div><strong>TikTok</strong><span>@orvya.ma</span></div></a></div>' },
-    faq: { t: 'Questions fréquentes', h: '<h1>Questions fréquentes</h1><p class="lead" style="margin-bottom:32px">Livraison, paiement, échanges, entretien : l’essentiel en un coup d’œil.</p>' + FAQ.map(function (q, i) { return acc(q[0], '<p>' + q[1] + '</p>', i === 0); }).join('') +
-      '<p style="margin-top:32px">Vous ne trouvez pas votre réponse ? <a class="link-u" href="' + WA + '" target="_blank" rel="noopener">Écrivez-nous sur WhatsApp</a>.</p>' },
-    livraison: { t: 'Livraison', h: '<h1>Livraison</h1><p class="lead">Livraison offerte partout au Maroc. Vous payez le livreur en espèces, à la réception.</p>' +
-      '<div class="facts"><div><strong>24–48 h</strong><span>Préparation après confirmation par téléphone</span></div><div><strong>24–48 h</strong><span>Grandes villes, après expédition</span></div><div><strong>2–4 j</strong><span>Autres villes et zones rurales (jours ouvrés)</span></div></div>' +
-      '<h2>Comment ça se passe</h2><ul><li>Votre commande est préparée sous 24 à 48 h après confirmation par téléphone.</li><li>Grandes villes (Casablanca, Rabat, Marrakech, Tanger, Fès, Agadir) : 24 à 48 h après expédition.</li><li>Autres villes et zones rurales : 2 à 4 jours ouvrés.</li><li>Un numéro de suivi vous est communiqué par SMS ou WhatsApp dès l’expédition.</li></ul>' +
-      '<h2>Paiement et ouverture du colis</h2><p>Vous payez le livreur en espèces à la réception. Aucun paiement n’est demandé au moment de la commande. Vous pouvez ouvrir et vérifier votre colis avant de payer.</p>' },
-    retours: { t: 'Retours & échanges', h: '<h1>Retours &amp; échanges</h1><p class="lead">Vous disposez de 7 jours après réception pour demander un échange ou un remboursement.</p>' +
-      '<h2>Conditions</h2><ul><li>L’article doit être non porté, non endommagé et dans son emballage d’origine.</li><li>Pour des raisons d’hygiène, les boucles d’oreilles ne sont ni reprises ni échangées, sauf défaut de fabrication.</li><li>Article défectueux ou erreur de commande : nous prenons en charge les frais de retour et vous renvoyons le bon article ou vous remboursons intégralement.</li></ul>' +
-      '<h2>Comment procéder</h2><p>Contactez-nous sur <a class="link-u" href="' + WA + '" target="_blank" rel="noopener">WhatsApp</a> avec votre numéro de commande et une photo de l’article, sous 7 jours après réception. Le remboursement est effectué sous 7 jours ouvrés après réception et vérification du retour.</p>' },
-    garantie: { t: 'Garantie', h: '<h1>Garantie 2 ans</h1><p class="lead">Si la finition dorée se dégrade dans des conditions d’utilisation normales, nous échangeons votre bijou gratuitement.</p>' +
-      '<h2>Comment en bénéficier</h2><p>Contactez-nous sur <a class="link-u" href="' + WA + '" target="_blank" rel="noopener">WhatsApp</a> avec votre numéro de commande et une photo de l’article.</p>' +
-      '<h2>Ce que la garantie ne couvre pas</h2><ul><li>Le contact avec les parfums et les produits chimiques.</li><li>Les dommages accidentels.</li></ul>' },
-    confidentialite: { t: 'Confidentialité', h: '<h1>Politique de confidentialité</h1><p class="lead">ORVYA ne collecte que les informations nécessaires au traitement et à la livraison de votre commande : nom, numéro de téléphone, adresse et ville.</p>' +
-      '<h2>Utilisation des données</h2><ul><li>Confirmer votre commande par téléphone ou WhatsApp.</li><li>Préparer et livrer votre colis via notre transporteur.</li><li>Vous informer du suivi de votre commande.</li></ul>' +
-      '<p style="margin-top:16px">Nous ne vendons ni ne louons vos données à des tiers. Elles sont transmises uniquement au transporteur chargé de votre livraison.</p>' +
-      '<h2>Cookies et mesure d’audience</h2><p>Notre site utilise des cookies ainsi que des outils de mesure d’audience et de publicité (tels que Meta Pixel, TikTok Pixel ou Google Analytics) afin d’améliorer l’expérience d’achat et la pertinence de nos annonces.</p>' +
-      '<h2>Paiement</h2><p>Aucune donnée bancaire n’est collectée : le paiement se fait exclusivement à la livraison, en espèces.</p><h2>Vos droits</h2><p>Pour toute demande d’accès, de correction ou de suppression de vos données, contactez-nous sur WhatsApp.</p>' },
-    conditions: { t: 'Conditions d’utilisation', h: '<h1>Conditions d’utilisation</h1><p class="lead">En passant commande sur notre site, vous acceptez les conditions suivantes.</p>' +
-      '<h2>Commandes</h2><p>Toute commande est confirmée par téléphone ou WhatsApp avant expédition. Une commande restée sans réponse après trois tentatives d’appel peut être annulée.</p>' +
-      '<h2>Prix</h2><p>Les prix sont affichés en dirhams marocains (MAD), toutes taxes comprises. La livraison est offerte partout au Maroc.</p>' +
-      '<h2>Paiement</h2><p>Le règlement s’effectue en espèces, directement au livreur, à la réception du colis.</p>' +
-      '<h2>Produits</h2><p>Nos bijoux sont en acier inoxydable 316L, finition dorée PVD. Les photographies sont fidèles aux articles ; de légères variations de teinte peuvent apparaître selon l’écran.</p>' +
-      '<h2>Entretien</h2><p>Nos bijoux résistent à l’eau. Nous recommandons néanmoins d’éviter le contact direct avec les parfums et les produits chimiques.</p>' +
-      '<h2>Annulation</h2><p>Vous pouvez annuler votre commande sans frais tant qu’elle n’a pas été expédiée.</p>' }
-  };
-  var INFO_ORDER = ['contact', 'faq', 'livraison', 'retours', 'garantie', 'confidentialite', 'conditions'];
+  /* Pages d'aide et pages juridiques (2026-11-19) : textes dans dist/orvya-legal.min.js (src/legal.js), charge seulement
+     sur /pages/* (il pese plus lourd que les anciens textes : inutile sur les autres pages). */
+  var LEGAL = null, legalP = null;
+  var LEGAL_URL = w.OV_LEGAL_URL || ASSETS.replace(/assets\/$/, 'dist/orvya-legal.min.js');
+  function loadLegal() {
+    if (LEGAL) return Promise.resolve(LEGAL);
+    if (!legalP) legalP = new Promise(function (res) {
+      function done() { try { LEGAL = w.OV_LEGAL({ WA: WA, I: I, esc: esc, acc: acc, FAQ: FAQ, PAGES: PAGES }); } catch (e) { LEGAL = null; } res(LEGAL); }
+      if (w.OV_LEGAL) return done();
+      var s = d.createElement('script'); s.src = LEGAL_URL; s.async = true; s.onload = done; s.onerror = function () { legalP = null; res(null); };
+      d.head.appendChild(s);
+    });
+    return legalP;
+  }
+  /* titre de l'onglet et description propres a chaque page d'aide (referencement) */
+  /* l'application remet le titre de la boutique apres nous (hydratation) : tant qu'une page d'aide est affichee, on le repose */
+  var wantMeta = null;
+  function applyMeta() {
+    if (!wantMeta || curView !== 'info') return;
+    if (d.title !== wantMeta[0]) d.title = wantMeta[0];
+    var m = $('meta[name="description"]'); if (m && wantMeta[1] && m.content !== wantMeta[1]) m.content = wantMeta[1];
+  }
+  function setMeta(title, desc) { wantMeta = [title + ' | ORVYA', desc]; applyMeta(); }
+  if (w.MutationObserver) new MutationObserver(applyMeta).observe(d.head, { childList: true, subtree: true, characterData: true, attributes: true, attributeFilter: ['content'] });
+  function vInfoWait() { return '<div class="wrap" style="padding-top:24px"><div class="info"><div></div><article class="prose" aria-busy="true"><p class="muted">Chargement…</p></article></div></div>'; }
   function vInfo(storeSlug) {
-    var k = INFO_SLUG[storeSlug], pg = INFO[k];
+    var k = LEGAL.slugs[storeSlug], pg = LEGAL.pages[k];
     if (!pg) {
       /* autre page creee dans EasyOrders : son titre et son texte, dans la mise en page de la maquette */
       var nd = nextData(), sp = nd && nd.props && nd.props.pageProps && nd.props.pageProps.page;
       if (!sp || sp.slug !== storeSlug) return null;
       pg = { t: esc(sp.title), h: '<h1>' + esc(sp.title) + '</h1>' + (sp.content || '') };
     }
-    var slugOf = {}; Object.keys(INFO_SLUG).forEach(function (s) { slugOf[INFO_SLUG[s]] = s; });
+    setMeta(pg.title || pg.t, pg.desc);
+    var slugOf = {}; Object.keys(LEGAL.slugs).forEach(function (s) { slugOf[LEGAL.slugs[s]] = s; });
     return '<div class="wrap" style="padding-top:24px">' + crumbs([['Accueil', '/'], [pg.t]]) + '<div class="info"><nav class="info-nav" aria-label="Pages d’aide">' +
-      INFO_ORDER.map(function (x) { var on = x === k; return '<a class="chip' + (on ? ' is-on' : '') + '" href="/pages/' + slugOf[x] + '"' + (on ? ' aria-current="page"' : '') + '>' + INFO[x].t + '</a>'; }).join('') +
+      LEGAL.order.map(function (x) { var on = x === k; return '<a class="chip' + (on ? ' is-on' : '') + '" href="/pages/' + slugOf[x] + '"' + (on ? ' aria-current="page"' : '') + '>' + LEGAL.pages[x].t + '</a>'; }).join('') +
       '</nav><article class="prose" data-rv="fade">' + pg.h + '</article></div></div>';
   }
   function vNotFound() {
@@ -519,7 +512,8 @@
       '<li><span class="thx__num">1</span><div><strong>Appel de confirmation</strong><p>Nous vous appelons' + (tel ? ' au <span class="thx__tel">' + esc(tel) + '</span>' : '') + ' pour confirmer votre commande et votre adresse. Gardez votre téléphone à portée de main.</p></div></li>' +
       '<li><span class="thx__num">2</span><div><strong>Préparation et expédition</strong><p>Une fois votre commande confirmée, ' + (many ? 'vos bijoux sont préparés avec soin puis confiés' : 'votre bijou est préparé avec soin puis confié') + ' au livreur.</p></div></li>' +
       '<li><span class="thx__num">3</span><div><strong>Livraison et paiement</strong><p>Livraison offerte en 2 à 4 jours ouvrés. Ouvrez votre colis, vérifiez ' + (many ? 'vos bijoux' : 'votre bijou') + ', puis payez le livreur en espèces.</p></div></li>' +
-      '</ol><p class="thx__help">Une erreur dans votre numéro ou votre adresse&nbsp;? <a class="link-u" href="' + wa + '" target="_blank" rel="noopener">Écrivez-nous sur WhatsApp</a></p></section>';
+      '</ol><p class="thx__help">Une erreur dans votre numéro ou votre adresse&nbsp;? <a class="link-u" href="' + wa + '" target="_blank" rel="noopener">Écrivez-nous sur WhatsApp</a></p>' +
+      '<p class="thx__help">Vous disposez de 7 jours après la réception pour changer d’avis : <a class="link-u" href="' + PAGES.retours + '">retours et remboursements</a> · <a class="link-u" href="' + PAGES.conditions + '">conditions générales de vente</a>.</p></section>';
     var lines = items.map(function (i) {
       var p = i.product || {}, name = p.name || '';
       return '<div class="thx__line">' + (p.thumb ? img(p.thumb, name, '', 'width="56" height="70"') : '<span></span>') +
@@ -552,13 +546,14 @@
           '<a href="' + WA + '" target="_blank" rel="noopener" aria-label="WhatsApp">' + I.wa + '</a></div></div>' +
         '<div><h4>Boutique</h4>' + linkList([['Tous les bijoux', '/collections/bijoux']].concat(ORDER.map(function (k) { return [CATS[k].name, '/collections/' + k]; }))) + '</div>' +
         '<div><h4>Aide</h4>' + linkList([['Livraison', PAGES.livraison], ['Retours &amp; échanges', PAGES.retours], ['Garantie', PAGES.garantie], ['Questions fréquentes', PAGES.faq], ['Suivre ma commande', WA_TRACK]]) + '</div>' +
-        '<div><h4>ORVYA</h4>' + linkList([['Nous contacter', PAGES.contact], ['Politique de confidentialité', PAGES.confidentialite], ['Conditions d’utilisation', PAGES.conditions]]) + '</div>' +
+        '<div><h4>ORVYA</h4>' + linkList([['Nous contacter', PAGES.contact], ['Conditions générales de vente', PAGES.conditions], ['Mentions légales', PAGES.mentions], ['Politique de confidentialité', PAGES.confidentialite], ['Politique cookies', PAGES.cookies]]) +
+          '<ul><li><button type="button" class="ov-linkbtn" data-ov-consent>Gérer mes cookies</button></li></ul></div>' +
       '</div><div class="footer__base"><span>© ' + new Date().getFullYear() + ' ORVYA · Paiement en espèces à la livraison</span><span>Acier inoxydable 316L, finition dorée PVD</span></div></div></footer>' +
       '<div class="drawer drawer--left" id="ov-menu" role="dialog" aria-modal="true" aria-label="Menu" aria-hidden="true"><div class="drawer__head">' +
         '<img src="' + LOGO + '" alt="ORVYA" style="height:26px;width:auto"><button class="icon-btn" data-close aria-label="Fermer le menu">' + I.close + '</button></div>' +
         '<div class="drawer__body"><nav class="mnav__main stagger" aria-label="Catégories"><a href="/collections/bijoux" style="--i:0">Tous les bijoux ' + I.arrow + '</a>' + ORDER.map(function (k, i) { return arrowLink(k, i + 1); }).join('') + '</nav>' +
-        '<div class="mnav__sub stagger"><a href="/wishlist" style="--i:5">Mes favoris</a><a href="' + WA_TRACK + '" target="_blank" rel="noopener" style="--i:6">Suivre ma commande</a><a href="' + PAGES.livraison + '" style="--i:7">Livraison</a><a href="' + PAGES.retours + '" style="--i:8">Retours &amp; échanges</a><a href="' + PAGES.faq + '" style="--i:9">Questions fréquentes</a><a href="' + PAGES.garantie + '" style="--i:10">Garantie</a></div>' +
-        '<div class="mnav__wa stagger"><a class="btn btn--ghost btn--full" style="--i:11" href="' + WA + '" target="_blank" rel="noopener">Écrivez-nous sur WhatsApp</a></div></div></div>' +
+        '<div class="mnav__sub stagger"><a href="/wishlist" style="--i:5">Mes favoris</a><a href="' + WA_TRACK + '" target="_blank" rel="noopener" style="--i:6">Suivre ma commande</a><a href="' + PAGES.livraison + '" style="--i:7">Livraison</a><a href="' + PAGES.retours + '" style="--i:8">Retours &amp; échanges</a><a href="' + PAGES.faq + '" style="--i:9">Questions fréquentes</a><a href="' + PAGES.garantie + '" style="--i:10">Garantie</a><a href="' + PAGES.conditions + '" style="--i:11">Conditions de vente</a><a href="' + PAGES.contact + '" style="--i:12">Nous contacter</a></div>' +
+        '<div class="mnav__wa stagger"><a class="btn btn--ghost btn--full" style="--i:13" href="' + WA + '" target="_blank" rel="noopener">Écrivez-nous sur WhatsApp</a></div></div></div>' +
       '<div class="drawer drawer--right" id="ov-cart" role="dialog" aria-modal="true" aria-labelledby="ov-cart-title" aria-hidden="true"><div class="drawer__head"><h2 class="drawer__title" id="ov-cart-title">Votre panier</h2>' +
         '<button class="icon-btn" data-close aria-label="Fermer le panier">' + I.close + '</button></div><div class="drawer__body" id="ov-cart-body"></div><div class="drawer__foot" id="ov-cart-foot"></div></div>' +
       '<div class="drawer drawer--right" id="ov-filters" role="dialog" aria-modal="true" aria-labelledby="ov-filters-title" aria-hidden="true"><div class="drawer__head"><h2 class="drawer__title" id="ov-filters-title">Filtrer</h2>' +
@@ -919,6 +914,55 @@
     });
   });
 
+  /* ---------- 16 bis. Cookies : bandeau de consentement (2026-11-19, deliberation CNDP D-939-2025) ----------
+     La logique est dans le code du head (bloc ORVYA-CONSENT, window.orvyaConsent) : elle s'execute avant le pixel Meta.
+     Ici seulement l'affichage. Refuser est aussi simple qu'accepter ; le choix est garde 6 mois puis redemande. */
+  function ccHTML(prefs) {
+    var c = (w.orvyaConsent && w.orvyaConsent.get()) || {};
+    var box = function (k, t, s) { return '<label class="check"><input type="checkbox" data-cc-k="' + k + '"' + (c[k] ? ' checked' : '') + '><span><strong>' + t + '</strong><br><span class="muted">' + s + '</span></span></label>'; };
+    return '<div class="ov ov-cc" id="ov-cc" role="dialog" aria-modal="false" aria-labelledby="ov-cc-t"><div class="ov-cc__box">' +
+      '<p class="ov-cc__t" id="ov-cc-t">Vos choix sur les cookies</p>' +
+      '<p class="ov-cc__p">ORVYA utilise des cookies nécessaires au fonctionnement de la boutique (panier, favoris, sécurité). Avec votre accord, nous utilisons aussi des traceurs de mesure d’audience (Saleura) et de publicité (Meta Pixel), qui peuvent transférer des données hors du Maroc. Votre choix est conservé 6 mois et modifiable à tout moment. <a class="link-u" href="' + PAGES.cookies + '">Politique cookies</a></p>' +
+      '<div class="ov-cc__prefs"' + (prefs ? '' : ' hidden') + '>' +
+        '<label class="check is-off"><input type="checkbox" checked disabled><span><strong>Nécessaires</strong><br><span class="muted">Toujours actifs : la boutique ne fonctionne pas sans eux.</span></span></label>' +
+        box('stats', 'Mesure d’audience', 'Saleura : d’où viennent les visiteurs et quelles pages les intéressent.') +
+        box('ads', 'Publicité', 'Meta Pixel : mesure de nos publicités Facebook et Instagram.') + '</div>' +
+      '<div class="ov-cc__btns"><button class="btn" type="button" data-cc="refuse">Tout refuser</button>' +
+        (prefs ? '<button class="btn btn--ghost" type="button" data-cc="save">Enregistrer</button>' : '<button class="btn btn--ghost" type="button" data-cc="custom">Personnaliser</button>') +
+        '<button class="btn" type="button" data-cc="accept">Tout accepter</button></div></div></div>';
+  }
+  function ccShow(prefs) {
+    if (!w.orvyaConsent) return;
+    var old = $('#ov-cc'); if (old) old.remove();
+    d.body.appendChild(el(ccHTML(prefs)));
+    root.classList.add('ov-cc-on');
+    if (prefs) { var f = $('#ov-cc [data-cc-k]'); if (f) f.focus(); }
+  }
+  function ccClose() { var b = $('#ov-cc'); if (b) b.remove(); root.classList.remove('ov-cc-on'); }
+  d.addEventListener('click', function (e) {
+    var o = e.target.closest && e.target.closest('[data-ov-consent]');
+    if (o) { e.preventDefault(); ccShow(true); return; }
+    var b = e.target.closest && e.target.closest('#ov-cc [data-cc]'); if (!b) return;
+    var a = b.getAttribute('data-cc'), C = w.orvyaConsent;
+    if (a === 'custom') { $('#ov-cc .ov-cc__prefs').hidden = false; b.outerHTML = '<button class="btn btn--ghost" type="button" data-cc="save">Enregistrer</button>'; return; }
+    var val = function (k) { var i = $('#ov-cc [data-cc-k="' + k + '"]'); return !!(i && i.checked); };
+    ccClose();
+    if (a === 'accept') C.set(true, true); else if (a === 'refuse') C.set(false, false); else C.set(val('ads'), val('stats'));
+  });
+  if (w.orvyaConsent && !w.orvyaConsent.get()) ccShow(false);
+
+  /* ---------- 16 ter. Formulaire de contact : ouvre WhatsApp avec le message redige (rien n'est enregistre) ---------- */
+  d.addEventListener('submit', function (e) {
+    if (e.target.id !== 'ov-contact') return;
+    e.preventDefault();
+    var f = e.target, ok = true;
+    ['name', 'message'].forEach(function (n) { var i = f.elements[n], bad = !i.value.trim(); i.closest('.field').classList.toggle('has-error', bad); if (bad && ok) { ok = false; i.focus(); } });
+    if (!ok) return;
+    var txt = 'Bonjour ORVYA,\n' + f.elements.message.value.trim() + '\n\n— ' + f.elements.name.value.trim() + '\nSujet : ' + f.elements.subject.value +
+      (f.elements.order.value.trim() ? '\nCommande n° ' + f.elements.order.value.trim() : '');
+    w.open(WA + '?text=' + encodeURIComponent(txt), '_blank', 'noopener');
+  });
+
   /* ---------- 16. Mouvement (maquette) ---------- */
   d.addEventListener('load', function (e) { if (e.target.tagName === 'IMG' && e.target.closest && e.target.closest('.ov')) e.target.classList.add('is-loaded'); }, true);
   d.addEventListener('error', function (e) { if (e.target.tagName === 'IMG' && e.target.closest && e.target.closest('.ov')) e.target.classList.add('is-loaded'); }, true);
@@ -1018,11 +1062,34 @@
     var btnBox = $('#checkout-button', form);
     if (btnBox && !$('#ov-co-pay', form)) btnBox.insertAdjacentHTML('beforebegin', '<div class="ov ov-dc" id="ov-co-pay"><div class="co ov-dc"><h2 style="margin-top:40px">Paiement</h2>' +
       '<div class="pay-opt"><span class="dot" aria-hidden="true"></span><div><strong>Paiement en espèces à la livraison</strong><span>Vous ouvrez le colis, vérifiez votre bijou, puis payez le livreur.</span></div></div>' +
-      '<div class="sum-row" style="margin-top:20px"><span>Livraison</span><span class="free" style="color:var(--ok);font-weight:500">Offerte · 2 à 4 jours ouvrés</span></div></div></div>');
+      '<div class="sum-row" style="margin-top:20px"><span>Livraison</span><span class="free" style="color:var(--ok);font-weight:500">Offerte · 2 à 4 jours ouvrés</span></div>' +
+      '<label class="check ov-cgv"><input type="checkbox" id="ov-cgv"' + (cgvOk ? ' checked' : '') + '><span>J’ai lu et j’accepte les <a class="link-u" href="' + PAGES.conditions + '" target="_blank" rel="noopener">conditions générales de vente</a> et la <a class="link-u" href="' + PAGES.confidentialite + '" target="_blank" rel="noopener">politique de confidentialité</a>.</span></label>' +
+      '<p class="ov-cgv__err" id="ov-cgv-err" role="alert" hidden>Cochez la case pour accepter les conditions générales de vente et confirmer votre commande.</p></div></div>');
     coFields(form);
     markLoaded();
     if (!coObs) { coObs = new MutationObserver(function () { var f = $('#__next form#checkout-form'); if (!$('#ov-co-head') || !$('#ov-co-pay') || !$('#ov-co-sum-wrap')) decorateCheckout(); else if (f) coFields(f); }); coObs.observe(next, { childList: true, subtree: true }); }
   }
+  /* Acceptation expresse des CGV avant la confirmation (loi 31-08, art. 30) : tant que la case n'est pas cochee, le clic sur
+     le bouton et l'envoi du formulaire sont arretes ici, avant l'application (ecoute en phase de capture sur document).
+     Si la case n'a pas pu etre posee (formulaire change par EasyOrders), rien n'est bloque : la commande passe toujours. */
+  var cgvOk = false;
+  function cgvGuard(e) {
+    if (curView !== 'checkout' || cgvOk) return;
+    var box = $('#ov-cgv'), form = e.target.closest && e.target.closest('#checkout-form');
+    if (!box || !form) return;
+    if (e.type === 'click' && !e.target.closest('button.checkout_buy_now, button[type="submit"]')) return;
+    e.preventDefault(); e.stopPropagation();
+    var err = $('#ov-cgv-err'); if (err) err.hidden = false;
+    box.closest('.ov-cgv').classList.add('has-error');
+    box.scrollIntoView({ block: 'center', behavior: reduced() ? 'auto' : 'smooth' }); box.focus({ preventScroll: true });
+  }
+  d.addEventListener('click', cgvGuard, true);
+  d.addEventListener('submit', cgvGuard, true);
+  d.addEventListener('change', function (e) {
+    if (e.target.id !== 'ov-cgv') return;
+    cgvOk = e.target.checked;
+    if (cgvOk) { var err = $('#ov-cgv-err'); if (err) err.hidden = true; e.target.closest('.ov-cgv').classList.remove('has-error'); }
+  });
   function initCheckout() {
     refreshCart().then(function (items) {
       if (curView !== 'checkout') return;
@@ -1061,7 +1128,11 @@
     else if (v === 'search') { var q = new URLSearchParams(location.search).get('q') || ''; mountPage(vSearch(q)); data().then(function (list) { if (curView === v) fillSearch(q, list); }); }
     else if (v === 'favorites') { mountPage(vFavorites(favItems([]))); data().then(function (list) { if (curView === v) { page.innerHTML = vFavorites(favItems(list)); afterRender(); } }); }
     else if (v === 'cart') { mountPage(vCart()); refreshCart(); }
-    else if (v === 'info') { var h = vInfo(seg); if (h) mountPage(h); else { curView = '404'; root.classList.add('ov-v-404'); mountPage(vNotFound()); } }
+    else if (v === 'info') {
+      var showInfo = function () { var h = vInfo(seg); if (h) mountPage(h); else { curView = '404'; root.classList.add('ov-v-404'); mountPage(vNotFound()); } };
+      if (LEGAL) showInfo();
+      else { mountPage(vInfoWait()); loadLegal().then(function (L) { if (curView !== v || path() !== p) return; if (L) showInfo(); else { curView = '404'; mountPage(vNotFound()); } }); }
+    }
     else if (v === '404') mountPage(vNotFound());
     else if (v === 'thanks') { mountPage(vThanks(null)); thanksOrder().then(function (o) { if (curView !== v) return; if (o && o.id) { page.innerHTML = vThanks(o); afterRender(); } else thanksFallback(); }); }
     else if (v === 'product') {
