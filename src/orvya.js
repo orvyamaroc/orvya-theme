@@ -181,7 +181,7 @@
       '<p class="eyebrow" data-rv>L’art d’offrir</p><h2 class="h2 split" data-rv>' + split('Un bijou se porte [[comme une signature]]') + '</h2>' +
       '<p class="lead" style="margin-top:24px" data-rv>Offrez-le à celle qui compte, ou offrez-vous ce luxe discret.</p>' +
       '<a class="btn btn--light" style="margin-top:32px" href="/collections/bijoux" data-rv="fade">Trouver le cadeau idéal</a></div>' +
-      '<div class="arch" data-rv="arch">' + img(CATS.bracelets.img, 'Bracelet doré porté au poignet', '', 'data-parallax="0.05"') + '</div></div></section>' +
+      '<div class="arch" data-rv="arch">' + img(CATS.bracelets.img, 'Bracelet doré autour d’un cylindre en travertin', '', 'data-parallax="0.05"') + '</div></div></section>' +
     '<section class="section"><div class="wrap" style="max-width:820px"><div class="center" style="margin-bottom:40px"><p class="eyebrow" data-rv>Vos questions</p><h2 class="h2 split" data-rv>' + split('Tout savoir avant [[de commander]]') + '</h2><span class="filet" data-rv="line"></span></div>' +
       '<div data-rv>' + FAQ.slice(0, 5).map(function (q) { return acc(q[0], '<p>' + q[1] + '</p>'); }).join('') + '</div>' +
       '<p class="center" style="margin-top:32px"><a class="link-arrow" href="' + PAGES.faq + '">Toutes les questions ' + I.arrow + '</a></p></div></section>' +

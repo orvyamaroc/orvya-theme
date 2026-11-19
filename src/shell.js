@@ -22,8 +22,8 @@ var OVS = (function () {
       bijoux: { name: 'Tous les bijoux', img: 'https://cdn.jsdelivr.net/gh/orvyamaroc/orvya-theme@v1.1.12/assets/orvya-categorie-bijoux-800x1000.webp' },
       bagues: { name: 'Bagues', img: 'https://cdn.jsdelivr.net/gh/orvyamaroc/orvya-theme@v1.1.12/assets/orvya-categorie-bagues-800x1000.webp' },
       colliers: { name: 'Colliers', img: 'https://cdn.jsdelivr.net/gh/orvyamaroc/orvya-theme@v1.1.12/assets/orvya-categorie-colliers-800x1000.webp' },
-      bracelets: { name: 'Bracelets', img: 'https://cdn.jsdelivr.net/gh/orvyamaroc/orvya-theme@v1.1.12/assets/orvya-categorie-bracelets-800x1000.webp' },
-      'boucles-oreilles': { name: 'Boucles d’oreilles', img: 'https://cdn.jsdelivr.net/gh/orvyamaroc/orvya-theme@v1.1.12/assets/orvya-categorie-boucles-oreilles-800x1000.webp' }
+      bracelets: { name: 'Bracelets', img: 'https://cdn.jsdelivr.net/gh/orvyamaroc/orvya-theme@v1.1.13/assets/orvya-categorie-bracelets-still-800x1000.webp' },
+      'boucles-oreilles': { name: 'Boucles d’oreilles', img: 'https://cdn.jsdelivr.net/gh/orvyamaroc/orvya-theme@v1.1.13/assets/orvya-categorie-boucles-oreilles-still-800x1000.webp' }
     },
     ORDER: ['bagues', 'colliers', 'bracelets', 'boucles-oreilles'],
     PAGES: { livraison: '/pages/shipping-policy', retours: '/pages/refund-policy', garantie: '/pages/garantie', confidentialite: '/pages/privacy-policy', conditions: '/pages/terms-and-conditions', faq: '/pages/faq', contact: '/pages/contact' },
