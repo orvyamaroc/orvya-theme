@@ -129,10 +129,10 @@
   function favOn(id) { return wishIds().indexOf(id) >= 0; }
   function card(p, i, eager) {
     var on = favOn(p.id);
-    return '<article class="card" data-rv style="--i:' + (i % 4) + '" data-fly-root>' +
+    return '<article class="card" data-rv style="--i:' + (i % 4) + '" data-fly-root><div class="card__fig">' +
       '<a class="card__media" href="/products/' + p.slug + '" tabindex="-1" aria-hidden="true">' + img(p.img, p.name, 'card__img', '', eager === true) + '</a>' +
       '<button class="fav' + (on ? ' is-on' : '') + '" data-fav="' + p.id + '" aria-pressed="' + on + '" aria-label="' + (on ? 'Retirer des' : 'Ajouter aux') + ' favoris : ' + esc(p.name) + '">' + I.heart + '</button>' +
-      '<button class="card__quick" data-add="' + p.slug + '" aria-label="Ajouter au panier : ' + esc(p.name) + '">' + I.bag + '<span>Ajouter au panier</span></button>' +
+      '<button class="card__quick" data-add="' + p.slug + '" aria-label="Ajouter au panier : ' + esc(p.name) + '">' + I.bag + '<span>Ajouter au panier</span></button></div>' +
       '<div class="card__body"><p class="card__cat">' + esc(p.cat) + '</p><h3 class="card__name"><a href="/products/' + p.slug + '">' + esc(p.name) + '</a></h3><p class="card__price">' + fmt(p.price) + '</p></div></article>';
   }
   function skelCard() { return '<div aria-hidden="true"><div class="skel" style="aspect-ratio:4/5"></div><div class="skel" style="height:10px;width:40%;margin-top:16px"></div><div class="skel" style="height:16px;width:75%;margin-top:10px"></div><div class="skel" style="height:12px;width:30%;margin-top:10px"></div></div>'; }
