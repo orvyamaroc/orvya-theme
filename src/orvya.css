@@ -20,8 +20,10 @@ html.ov-locked{overflow:hidden}
 .ov main.ov-page{display:block;min-height:60vh}
 /* le theme met body (et #__next) en colonne flexible de hauteur fixe : nos blocs ne doivent jamais y retrecir */
 .ov.ov-top > *,.ov.ov-end{flex-shrink:0}
-/* Fiche produit : photos montrees entieres (jamais recadrees), quel que soit leur format ; fond sable autour si besoin */
-.ov .g-slide img,.ov .g-thumbs button img{object-fit:contain}
+/* Fiche produit : seulement les photos ajoutees dans EasyOrders (orvya.js). 2026-11-19 (proprietaire) : la photo remplit
+   toute la zone 4:5 (object-fit:cover de la maquette), plus de bandes sable autour comme en v1.1.9 (contain). */
+/* Bandeau d'annonce : meme fond que le pied de page (--bordeaux-900), demande du proprietaire 2026-11-19 */
+.ov .annonce{background:var(--bordeaux-900)}
 /* En-tete toujours visible : fixe en haut de l'ecran une fois le bandeau passe, sa cale garde sa place (orvya.js) */
 .ov .ov-hdr-sp{display:block;height:0}
 html.ov-hdr-fix .ov .header{position:fixed;top:0;left:0;right:0}
