@@ -259,12 +259,7 @@
   function fillCollection(slug, list) {
     gridBase = { kind: 'cat', slug: slug, all: list };
     refreshGrid();
-    var base = currentBase();
-    var note = $('#ov-coll-note');
-    if (note && base.length < 3) {
-      note.innerHTML = '<div class="coll-note"><div class="section-head"><div><p class="eyebrow">À découvrir aussi</p><h2 class="h2" style="font-size:2rem">Complétez votre <em>parure</em></h2></div></div><div class="grid grid--4">' +
-        list.filter(function (p) { return p.catSlug !== slug; }).map(card).join('') + '</div></div>';
-    }
+    /* 2026-11-19 (proprietaire) : plus de bloc « À découvrir aussi » sur les pages collection ; les suggestions restent sur la fiche produit */
     afterRender();
   }
   function searchBase(q, all) {
@@ -372,6 +367,15 @@
       acc('Livraison &amp; retours', '<p>Nous confirmons votre commande par téléphone avant l’expédition. Votre bijou vous parvient en 2 à 4 jours ouvrés selon votre ville. Livraison offerte partout au Maroc, paiement en espèces à la livraison.</p>' + retours) +
       acc('Garantie', '<p>Garantie 2 ans : si la finition dorée se dégrade dans des conditions d’utilisation normales, nous échangeons votre bijou gratuitement. La garantie ne couvre pas le contact avec les parfums et produits chimiques, ni les dommages accidentels.</p>') +
       '</div></div></div></div>';
+  }
+  /* Avis : quand EasyOrders n'affiche pas sa section (produit sans avis), la section vide de la maquette ; « Écrire un avis » ouvre WhatsApp */
+  function vReviewsFallback(p) {
+    var msg = encodeURIComponent('Bonjour ORVYA, je souhaite laisser un avis sur « ' + p.name + ' » : ');
+    return '<div class="wrap" id="ov-reviews"><section class="reviews" aria-labelledby="ov-rev-t"><div><p class="eyebrow">Avis</p>' +
+      '<h2 class="h2" id="ov-rev-t" style="font-size:2.25rem;margin-top:8px">Avis de nos clientes</h2></div>' +
+      '<div class="empty" style="padding:24px 0;text-align:left;margin:0"><div class="stars" aria-hidden="true">' + I.star + I.star + I.star + I.star + I.star + '</div>' +
+      '<p style="margin-top:12px;color:var(--encre)">Aucun avis pour le moment sur ce bijou.</p><p>Vous l’avez reçu ? Votre avis aidera les prochaines clientes.</p>' +
+      '<a class="btn btn--ghost btn--sm" style="margin-top:20px" href="' + WA + '?text=' + msg + '" target="_blank" rel="noopener">Écrire un avis</a></div></section></div>';
   }
   /* « Vous aimerez aussi » : apres les avis de la boutique (qui restent ceux d'EasyOrders), avant le pied de page */
   function vRelated(list, p) {
@@ -1065,7 +1069,13 @@
         if (curView !== v) return;
         if (!pr || pr.variants) { root.classList.remove('ov-view', 'ov-v-product'); if (page) page.hidden = true; return; }   /* produit a options : la fiche du theme */
         mountPage(vProduct(pr)); initProduct(pr);
-        data().then(function (list) { if (curView === v) { $('#ov-after').innerHTML = vRelated(list, pr); afterRender(); } });
+        var key = path();
+        data().then(function (list) { if (curView === v && path() === key) { var rv = $('#ov-reviews'); $('#ov-after').innerHTML = (rv ? rv.outerHTML : '') + vRelated(list, pr); afterRender(); } });
+        waitFor(function () { return $('#__next #ab-reviews'); }, 8000).then(function (has) {
+          var after = $('#ov-after');
+          if (has || !after || curView !== v || path() !== key || $('#ov-reviews')) return;
+          after.insertAdjacentHTML('afterbegin', vReviewsFallback(pr)); afterRender();
+        });
         waitFor(function () { return $('#__next #ab-reviews .ab-reviews-score-value'); }, 15000).then(syncReviews);
       });
     }

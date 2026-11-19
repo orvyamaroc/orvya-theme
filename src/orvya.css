@@ -221,3 +221,31 @@ html.ov-co-ready #checkout-form button.checkout_buy_now::after{content:"\00a0· 
   .ov .coll-hero .lead{max-width:40ch}
   .ov .coll-hero .cat-tabs{flex-wrap:wrap;overflow:visible;margin-top:var(--s-6)}
 }
+
+/* ---------- Fiche produit sur telephone (v1.1.16, demande de la proprietaire 2026-11-19) ----------
+   But : « Commander maintenant » visible sans defiler sur un telephone courant. L'ordinateur (>= 960px) ne change pas.
+   Photo carree au lieu de 4:5, fil d'Ariane et titre plus compacts, categorie deja dans le fil d'Ariane, boutons d'achat
+   juste sous le prix ; description et pictos passent sous les boutons. */
+@media (max-width:959px){
+  html.ov-v-product .ov .crumbs{margin-bottom:var(--s-3);font-size:12px;gap:6px}
+  .ov .pdp{gap:var(--s-4);padding-block:0 var(--s-8)}
+  .ov .pdp .g-slide{aspect-ratio:1/1}
+  .ov .pdp .g-dots{margin-top:var(--s-2)}
+  .ov .pdp__info{display:flex;flex-direction:column}
+  .ov .pdp__info > .eyebrow{display:none}
+  .ov .pdp__title{font-size:clamp(1.75rem,1.45rem + 1.6vw,2.25rem);line-height:1.1}
+  .ov .pdp__price{margin-top:var(--s-2)}
+  .ov .pdp__buy{order:1;margin-top:var(--s-4);gap:10px}
+  .ov .pdp__buy .qty,.ov .pdp__buy .btn{min-height:48px}
+  .ov .pdp__note{margin-top:-2px}
+  .ov .pdp__alert{order:2}
+  .ov .pdp__desc{order:3;margin-top:var(--s-5);line-height:1.65}
+  .ov .pdp__meta{order:4;margin-top:var(--s-3)}
+  .ov .pdp__assure{order:5;margin-top:var(--s-5)}
+  .ov .pdp__accs{order:6;margin-top:var(--s-5)}
+  html.ov-v-product #ov-reviews .reviews{padding:var(--s-6) 0}
+}
+/* ecrans courts (petits telephones, barres du navigateur visibles) : photo un peu plus large que haute */
+@media (max-width:959px) and (max-height:760px){
+  .ov .pdp .g-slide{aspect-ratio:5/4}
+}
