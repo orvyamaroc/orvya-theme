@@ -21,8 +21,7 @@ window.OV_LEGAL = function (h) {
     statut: 'Personne physique (exploitant individuel)',
     adresse: 'El Oualfa, Haj Fateh, Casablanca', // telle que donnee le 2026-11-19 (sans numero de rue)
     email: 'orvya.ma@gmail.com',
-    tel: '+212 7 69 31 66 36', // numero WhatsApp Business (Saleura) depuis le 2026-11-20
-    telHref: 'tel:+212769316636',
+    tel: '+212 7 69 31 66 36', // numero WhatsApp Business (Saleura) depuis le 2026-11-20 : WhatsApp uniquement, pas d'appels (proprietaire)
     /* false = pas d'immatriculation a ce jour (proprietaire, 2026-11-19) : la ligne n'est pas affichee (jamais de faux numero).
        Des l'inscription (RC ou auto-entrepreneur), mettre les numeros ici. */
     immat: false,       // n° RC (et tribunal) ou n° d'inscription au registre national de l'auto-entrepreneur
@@ -38,14 +37,14 @@ window.OV_LEGAL = function (h) {
   function v(k, label) { return L[k] ? esc(L[k]) : '<mark class="ov-ph">[À compléter : ' + label + ']</mark>'; }
   var mail = L.email ? '<a class="link-u" href="mailto:' + esc(L.email) + '">' + esc(L.email) + '</a>' : v('email', 'e-mail professionnel');
   var wa = function (txt, label) { return '<a class="link-u" href="' + WA + (txt ? '?text=' + encodeURIComponent(txt) : '') + '" target="_blank" rel="noopener">' + (label || 'WhatsApp') + '</a>'; };
-  var tel = '<a class="link-u" href="' + L.telHref + '">' + L.tel + '</a>';
+  var tel = '<a class="link-u" href="' + WA + '" target="_blank" rel="noopener">' + L.tel + '</a>'; // lien WhatsApp (pas d'appels sur ce numero)
   var P = h.PAGES;
   var link = function (k, t) { return '<a class="link-u" href="' + P[k] + '">' + t + '</a>'; };
   var maj = '<p class="ov-maj">Dernière mise à jour : ' + L.maj + '</p>';
   var ident = '<ul><li><strong>Exploitant :</strong> ' + v('vendeur', 'nom et prénom ou dénomination sociale') + '</li>' +
     '<li><strong>Statut juridique :</strong> ' + v('statut', 'statut juridique') + '</li>' +
     '<li><strong>Adresse :</strong> ' + v('adresse', 'adresse professionnelle') + '</li>' +
-    '<li><strong>Téléphone et WhatsApp :</strong> ' + tel + '</li><li><strong>E-mail :</strong> ' + mail + '</li></ul>';
+    '<li><strong>WhatsApp (messages uniquement) :</strong> ' + tel + '</li><li><strong>E-mail :</strong> ' + mail + '</li></ul>';
 
   /* numeros d'immatriculation : seulement ceux qui existent (false = aucun a ce jour, rien n'est affiche) */
   function immatBlock(open, close, item) {
