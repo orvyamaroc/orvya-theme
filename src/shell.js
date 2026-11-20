@@ -7,7 +7,7 @@
  */
 var OVS = (function () {
   var CDN = 'https://files.easy-orders.net/';
-  var WA = 'https://wa.me/212656127778';
+  var WA = 'https://wa.me/212769316636';
   var S = {
     CDN: CDN,
     WA: WA,

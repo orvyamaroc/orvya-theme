@@ -21,8 +21,8 @@ window.OV_LEGAL = function (h) {
     statut: 'Personne physique (exploitant individuel)',
     adresse: 'El Oualfa, Haj Fateh, Casablanca', // telle que donnee le 2026-11-19 (sans numero de rue)
     email: 'orvya.ma@gmail.com',
-    tel: '+212 6 56 12 77 78',
-    telHref: 'tel:+212656127778',
+    tel: '+212 7 69 31 66 36', // numero WhatsApp Business (Saleura) depuis le 2026-11-20
+    telHref: 'tel:+212769316636',
     /* false = pas d'immatriculation a ce jour (proprietaire, 2026-11-19) : la ligne n'est pas affichee (jamais de faux numero).
        Des l'inscription (RC ou auto-entrepreneur), mettre les numeros ici. */
     immat: false,       // n° RC (et tribunal) ou n° d'inscription au registre national de l'auto-entrepreneur
@@ -33,7 +33,7 @@ window.OV_LEGAL = function (h) {
     cndp: null,         // n° des recepisses CNDP (fichier clients, cookies)
     cndpTransfert: null,// reference de l'autorisation CNDP de transfert a l'etranger
     horaires: null,     // horaires du service client
-    maj: '19 novembre 2026'
+    maj: '20 novembre 2026'
   };
   function v(k, label) { return L[k] ? esc(L[k]) : '<mark class="ov-ph">[À compléter : ' + label + ']</mark>'; }
   var mail = L.email ? '<a class="link-u" href="mailto:' + esc(L.email) + '">' + esc(L.email) + '</a>' : v('email', 'e-mail professionnel');
